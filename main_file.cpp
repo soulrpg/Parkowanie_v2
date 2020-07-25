@@ -41,13 +41,23 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "Camera.h"
 #include "Basic.h"
 
-std::string model_name = "jeep";
+// Ilosc modeli na scenie
+#define NUM_OF_MODELS_TOTAL 2
 
-GLuint tex;
 Camera* camera;
 
-float speed_x = 3;//[radiany/s]
-float speed_y = 0;//[radiany/s]
+// Ilosc unikalnych modeli (typow)
+int Basic::num_of_unique_models = 6;
+
+int* Basic::vertexCount = new int[num_of_unique_models];
+float** Basic::vertices = new float*[num_of_unique_models];
+float** Basic::normals = new float*[num_of_unique_models];
+float** Basic::texCoords = new float*[num_of_unique_models];
+
+Basic* models[NUM_OF_MODELS_TOTAL];
+
+ShaderProgram* Basic::sp;
+
 
 //Procedura obsługi błędów
 void error_callback(int error, const char* description) {
@@ -99,12 +109,49 @@ void mouse_button_callback(GLFWwindow * window, int button, int action, int mods
 	}
 }
 
+void load_models() {
+	Basic::vertexCount[jeep] = jeepVertexCount;
+	Basic::vertexCount[slupek] = slupeknewVertexCount;
+	Basic::vertexCount[lamp] = lampnewVertexCount;
+	Basic::vertexCount[truck] = trucknewVertexCount;
+	Basic::vertexCount[trailer] = trailernewVertexCount;
+	Basic::vertexCount[arrow] = arrownewVertexCount;
+
+	Basic::vertices[jeep] = jeepVertices;
+	Basic::vertices[slupek] = slupeknewVertices;
+	Basic::vertices[lamp] = lampnewVertices;
+	Basic::vertices[truck] = trucknewVertices;
+	Basic::vertices[trailer] = trailernewVertices;
+	Basic::vertices[arrow] = arrownewVertices;
+
+	Basic::normals[jeep] = jeepNormals;
+	Basic::normals[slupek] = slupeknewNormals;
+	Basic::normals[lamp] = lampnewNormals;
+	Basic::normals[truck] = trucknewNormals;
+	Basic::normals[trailer] = trailernewNormals;
+	Basic::normals[arrow] = arrownewNormals;
+
+	Basic::texCoords[jeep] = jeepTexCoords;
+	Basic::texCoords[slupek] = slupeknewTexCoords;
+	Basic::texCoords[lamp] = lampnewTexCoords;
+	Basic::texCoords[truck] = trucknewTexCoords;
+	Basic::texCoords[trailer] = trailernewTexCoords;
+	Basic::texCoords[arrow] = arrownewTexCoords; 
+}
+
 //Procedura inicjująca
 void initOpenGLProgram(GLFWwindow* window) {
     initShaders();
+	Basic::sp = spLambertTextured;
+	load_models();
 	//************Tutaj umieszczaj kod, który należy wykonać raz, na początku programu************
-	tex = Basic::readTexture((char *)("Textures/"+model_name+".png").c_str());
 	camera = new Camera(glm::vec3(0.0f, 1.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f)); // Tworzy obiekt kamery
+
+	// Inicjalizuje modele na scenie
+	models[0] = new Basic(jeep, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "jeep", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, true);
+	models[1] = new Basic(slupek, glm::vec3(2.0f, 0.2f, 0.0f), glm::vec3(0.05f, 0.05f, 0.05f), "slupeknew", 50.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	// Koniec inicjalizacji modeli (ilość modeli w NUM_OF_MODELS_TOTAL
+	
 	glClearColor(1.0f, 1.0f, 0, 1); //Ustaw kolor czyszczenia bufora kolorów
 	glEnable(GL_DEPTH_TEST); //Włącz test głębokości na pikselach
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -118,49 +165,39 @@ void initOpenGLProgram(GLFWwindow* window) {
 void freeOpenGLProgram(GLFWwindow* window) {
     freeShaders();
     //************Tutaj umieszczaj kod, który należy wykonać po zakończeniu pętli głównej************
-	glDeleteTextures(1, &tex);
+	//glDeleteTextures(1, &tex);
 }
 
 //Procedura rysująca zawartość sceny
-void drawScene(GLFWwindow* window,float angle_x,float angle_y) {
+void drawScene(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod rysujący obraz******************l
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-	glm::mat4 M = glm::mat4(1.0f);
-	M = glm::rotate(M, angle_x, glm::vec3(0.0f, 1.0f, 0.0f));
-	//M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 	glm::mat4 V = glm::lookAt(camera->position, camera->position + camera->to_target_vector, glm::vec3(0.0f, 1.0f, 0.0f));
-	//std::cout << "Target vector (x: " << camera->position.x + camera->to_target_vector.x << " y: " << camera->position.y + camera->to_target_vector.y << " z: " << camera->position.z + camera->to_target_vector.z << ")" << std::endl;
-
 	glm::mat4 P = glm::perspective(glm::radians(50.0f), float(WIDTH/HEIGHT), 1.0f, 50.0f);
+
 	// Kod rysujący
-	spLambertTextured->use();
-	glUniformMatrix4fv(spLambertTextured->u("P"), 1, false, glm::value_ptr(P));
-	glUniformMatrix4fv(spLambertTextured->u("V"), 1, false, glm::value_ptr(V));
+	Basic::sp->use();
+	glUniformMatrix4fv(Basic::sp->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(Basic::sp->u("V"), 1, false, glm::value_ptr(V));
 
-	// Kod dla każdego modelu
-	glUniformMatrix4fv(spLambertTextured->u("M"), 1, false, glm::value_ptr(M));
-	glEnableVertexAttribArray(spLambertTextured->a("vertex"));
-	glVertexAttribPointer(spLambertTextured->a("vertex"), 4, GL_FLOAT, false, 0, jeepVertices);
+	// Rysowanie modeli
+	for (int i = 0; i < NUM_OF_MODELS_TOTAL; i++) {
+		models[i]->draw();
+	}
 
-	glEnableVertexAttribArray(spLambertTextured->a("normal"));
-	glVertexAttribPointer(spLambertTextured->a("normal"), 4, GL_FLOAT, false, 0, jeepNormals);
-	
-	glEnableVertexAttribArray(spLambertTextured->a("texCoord"));
-	glVertexAttribPointer(spLambertTextured->a("texCoord"), 2, GL_FLOAT, false, 0, jeepTexCoords);
-	
-	glActiveTexture(GL_TEXTURE0); 
-	glBindTexture(GL_TEXTURE_2D, tex); 
-    glUniform1i(spLambertTextured->u("tex"), 0);
     //glDisable(GL_CULL_FACE);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glDrawArrays(GL_TRIANGLES, 0, jeepVertexCount);
-	glDisableVertexAttribArray(spLambertTextured->a("vertex"));
-	glDisableVertexAttribArray(spLambertTextured->a("normal"));
-	glDisableVertexAttribArray(spLambertTextured->a("texCoord"));
 
 	//Skopiuj bufor tylny do bufora przedniego
 	glfwSwapBuffers(window); 
 
+}
+
+void sceneUpdate() {
+	camera->update();
+	for (int i = 0; i < NUM_OF_MODELS_TOTAL; i++) {
+		models[i]->updateRotation();
+	}
 }
 
 
@@ -195,16 +232,12 @@ int main(void)
 	initOpenGLProgram(window); //Operacje inicjujące
 
 	//Główna pętla
-	float angle_x = 0; //zadeklaruj zmienną przechowującą aktualny kąt obrotu
-	float angle_y = 0; //zadeklaruj zmienną przechowującą aktualny kąt obrotu
 	glfwSetTime(0); //Wyzeruj licznik czasu
 	while (!glfwWindowShouldClose(window)) //Tak długo jak okno nie powinno zostać zamknięte
 	{
-		angle_x += speed_x * glfwGetTime(); //Oblicz kąt o jaki obiekt obrócił się podczas poprzedniej klatki
-		angle_y += speed_y * glfwGetTime(); //Oblicz kąt o jaki obiekt obrócił się podczas poprzedniej klatki
+		sceneUpdate();
 		glfwSetTime(0); //Wyzeruj licznik czasu
-		camera->update();
-		drawScene(window,angle_x,angle_y); //Wykonaj procedurę rysującą
+		drawScene(window); //Wykonaj procedurę rysującą
 		glfwPollEvents(); //Wykonaj procedury callback w zalezności od zdarzeń jakie zaszły.
 	}
 

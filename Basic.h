@@ -10,6 +10,7 @@
 #include "constants.h"
 #include "shaderprogram.h"
 #include "lodepng.h"
+#include <iostream>
 
 namespace model_types {
 	enum Model_type {
@@ -22,26 +23,30 @@ using namespace model_types;
 class Basic
 {
 public:
-	static const int num_of_unique_models = 6;
-	static int* vertexCount[num_of_unique_models];
-	static float* vertices[num_of_unique_models];
-	static float* texCoords[num_of_unique_models];
-	static float* normals[num_of_unique_models];
+	static int num_of_unique_models;
+	static int* vertexCount;
+	static float** vertices;
+	static float** texCoords;
+	static float** normals;
+	static ShaderProgram* sp;
 private:
-	glm::vec4 scale;
-	glm::mat4 M;
-	float rotation_angle[3];
+	glm::vec3 scale;
+	glm::vec3 transform;
+	glm::vec3 rotation;
+	float rotation_angle;
 	std::string texture_name;
-	bool is_rotating[3];
+	GLuint texture_handle;
 	Model_type model_type;
 	bool is_visible;
-	GLuint texture_handle;
-	ShaderProgram* sp;
+	bool is_rotating;
 
 public:
-	Basic(Model_type model_type, glm::mat4 M, glm::vec4 scale, std::string texture_name, float rotation_angle[], bool is_rotating[], bool is_visible);
+	Basic(Model_type model_type, glm::vec3 transform, glm::vec3 scale, std::string texture_name, float rotation_angle, glm::vec3 rotation, bool is_visible, bool is_rotating);
 	void draw();
+	void translate(glm::vec3 pos);
+	void applyScale();
 	static GLuint readTexture(char* filename);
+	void updateRotation();
 };
 
 

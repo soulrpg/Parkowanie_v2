@@ -1,38 +1,44 @@
 #include "Basic.h"
 
 
-Basic::Basic(Model_type model_type, glm::mat4 M, glm::vec4 scale, std::string texture_name, float rotation_angle[], bool is_rotating[], bool is_visible){
+Basic::Basic(Model_type model_type, glm::vec3 transform, glm::vec3 scale, std::string texture_name, float rotation_angle, glm::vec3 rotation, bool is_visible, bool is_rotating){
 	this->model_type = model_type;
-	this->M = M;
+	this->transform = transform;
 	this->scale = scale;
+	this->rotation = rotation;
 	this->texture_name = texture_name;
-	for (int i = 0; i < 3; i++) {
-		this->rotation_angle[i] = rotation_angle[i];
-		this->is_rotating[i] = is_rotating[i];
-	}
+	this->rotation_angle = rotation_angle;
 	this->is_visible = is_visible;
+	this->is_rotating = is_rotating;
 	texture_handle = readTexture((char*)("Textures/" + texture_name + ".png").c_str());
-	sp = new ShaderProgram("v_lamberttextured.glsl", NULL, "f_lamberttextured.glsl");
 }
 
 void Basic::draw() {
-	glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(this->M));
-	glEnableVertexAttribArray(sp->a("vertex"));
-	glVertexAttribPointer(sp->a("vertex"), 4, GL_FLOAT, false, 0, Basic::vertices[model_type]);
+	if (this->is_visible)
+	{
+		Basic::sp->use();
+		glm::mat4 M = glm::mat4(1.0f);
+		M = glm::translate(M, transform);
+		M = glm::rotate(M, glm::radians(rotation_angle), rotation);
+		M = glm::scale(M, scale);
+		glUniformMatrix4fv(Basic::sp->u("M"), 1, false, glm::value_ptr(M));
+		glEnableVertexAttribArray(Basic::sp->a("vertex"));
+		glVertexAttribPointer(Basic::sp->a("vertex"), 4, GL_FLOAT, false, 0, Basic::vertices[model_type]);
 
-	glEnableVertexAttribArray(sp->a("normal"));
-	glVertexAttribPointer(sp->a("normal"), 4, GL_FLOAT, false, 0, Basic::normals[model_type]);
+		glEnableVertexAttribArray(Basic::sp->a("normal"));
+		glVertexAttribPointer(Basic::sp->a("normal"), 4, GL_FLOAT, false, 0, Basic::normals[model_type]);
 
-	glEnableVertexAttribArray(sp->a("texCoord"));
-	glVertexAttribPointer(sp->a("texCoord"), 2, GL_FLOAT, false, 0, Basic::texCoords[model_type]);
+		glEnableVertexAttribArray(Basic::sp->a("texCoord"));
+		glVertexAttribPointer(Basic::sp->a("texCoord"), 2, GL_FLOAT, false, 0, Basic::texCoords[model_type]);
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture_handle);
-	glUniform1i(sp->u("tex"), 0);
-	glDrawArrays(GL_TRIANGLES, 0, *Basic::vertexCount[model_type]);
-	glDisableVertexAttribArray(sp->a("vertex"));
-	glDisableVertexAttribArray(sp->a("normal"));
-	glDisableVertexAttribArray(sp->a("texCoord"));
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture_handle);
+		glUniform1i(sp->u("tex"), 0);
+		glDrawArrays(GL_TRIANGLES, 0, Basic::vertexCount[model_type]);
+		glDisableVertexAttribArray(Basic::sp->a("vertex"));
+		glDisableVertexAttribArray(Basic::sp->a("normal"));
+		glDisableVertexAttribArray(Basic::sp->a("texCoord"));
+	}
 }
 
 //Funkcja wczytuj¹ca teksturê 
@@ -57,4 +63,16 @@ GLuint Basic::readTexture(char* filename) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	return tex;
+}
+
+void Basic::translate(glm::vec3 pos) {
+	this->transform = pos;
+}
+
+void Basic::updateRotation() {
+	if (is_rotating) {
+		//angle_x += speed_x * glfwGetTime(); //Oblicz k¹t o jaki obiekt obróci³ siê podczas poprzedniej klatki
+		//angle_y += speed_y * glfwGetTime(); //Oblicz k¹t o jaki obiekt obróci³ siê podczas poprzedniej klatki
+		rotation_angle += 3.0f * glfwGetTime();
+	}
 }
