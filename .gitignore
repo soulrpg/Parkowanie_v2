@@ -1,0 +1,44 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+.vs/Parkowanie/v16/.suo
+.vs/Parkowanie/v16/Browse.VC.db
+.vs/Parkowanie/v16/Browse.VC.opendb
+.vs/Parkowanie/v16/ipch/AutoPCH/44bb527a73c7eab8/LODEPNG.ipch
+.vs/Parkowanie/v16/ipch/AutoPCH/48f2c3c9cc72a512/BASIC.ipch
+.vs/Parkowanie/v16/ipch/AutoPCH/96093588600c67e1/MAIN_FILE.ipch
+.vs/Parkowanie/v16/ipch/AutoPCH/c0fd0e25e3797ac1/BASIC.ipch
+.vs/Parkowanie/v16/ipch/AutoPCH/e8344bd812d8419e/SHADERPROGRAM.ipch
+.vs/Parkowanie/v16/Solution.VC.db
+.vs/ProjectSettings.json
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json

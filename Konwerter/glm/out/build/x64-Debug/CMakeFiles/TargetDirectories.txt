@@ -1,0 +1,2 @@
+C:/Users/Michal/Desktop/pl_szkielet_03_win/glm/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/Michal/Desktop/pl_szkielet_03_win/glm/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
