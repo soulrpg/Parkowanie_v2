@@ -40,14 +40,21 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "Models/arrownew.h"
 #include "Camera.h"
 #include "Basic.h"
+#include "Arrow.h"
+#include "cube.h"
+#include "Truck.h"
 
 // Ilosc modeli na scenie
 #define NUM_OF_MODELS_TOTAL 2
 
+#define TRUCK_ID 1
+
 Camera* camera;
 
+bool car_movement[4];
+
 // Ilosc unikalnych modeli (typow)
-int Basic::num_of_unique_models = 6;
+int Basic::num_of_unique_models = 7;
 
 int* Basic::vertexCount = new int[num_of_unique_models];
 float** Basic::vertices = new float*[num_of_unique_models];
@@ -58,6 +65,10 @@ Basic* models[NUM_OF_MODELS_TOTAL];
 
 ShaderProgram* Basic::sp;
 
+float LightPos[] = {
+	20.0f, 0.0f, 0.0f, 1.0f,
+	-20.0f, 0.0f, 0.0f, 1.0f
+};
 
 //Procedura obsługi błędów
 void error_callback(int error, const char* description) {
@@ -73,9 +84,35 @@ void key_callback(
 ) {
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
 		std::cout << "W pressed!" << std::endl;
+		car_movement[0] = true;
 	}
 	if (key == GLFW_KEY_W && action == GLFW_RELEASE) {
 		std::cout << "W released!" << std::endl;
+		car_movement[0] = false;
+	}
+	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+		std::cout << "A pressed!" << std::endl;
+		car_movement[1] = true;
+	}
+	if (key == GLFW_KEY_A && action == GLFW_RELEASE) {
+		std::cout << "A released!" << std::endl;
+		car_movement[1] = false;
+	}
+	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+		std::cout << "S pressed!" << std::endl;
+		car_movement[2] = true;
+	}
+	if (key == GLFW_KEY_S && action == GLFW_RELEASE) {
+		std::cout << "S released!" << std::endl;
+		car_movement[2] = false;
+	}
+	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
+		std::cout << "D pressed!" << std::endl;
+		car_movement[3] = true;
+	}
+	if (key == GLFW_KEY_D && action == GLFW_RELEASE) {
+		std::cout << "D released!" << std::endl;
+		car_movement[3] = false;
 	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
@@ -116,6 +153,7 @@ void load_models() {
 	Basic::vertexCount[truck] = trucknewVertexCount;
 	Basic::vertexCount[trailer] = trailernewVertexCount;
 	Basic::vertexCount[arrow] = arrownewVertexCount;
+	Basic::vertexCount[cube] = Models::CubeInternal::vertexCount;
 
 	Basic::vertices[jeep] = jeepVertices;
 	Basic::vertices[slupek] = slupeknewVertices;
@@ -123,6 +161,7 @@ void load_models() {
 	Basic::vertices[truck] = trucknewVertices;
 	Basic::vertices[trailer] = trailernewVertices;
 	Basic::vertices[arrow] = arrownewVertices;
+	Basic::vertices[cube] = Models::CubeInternal::vertices;
 
 	Basic::normals[jeep] = jeepNormals;
 	Basic::normals[slupek] = slupeknewNormals;
@@ -130,6 +169,7 @@ void load_models() {
 	Basic::normals[truck] = trucknewNormals;
 	Basic::normals[trailer] = trailernewNormals;
 	Basic::normals[arrow] = arrownewNormals;
+	Basic::normals[cube] = Models::CubeInternal::normals;
 
 	Basic::texCoords[jeep] = jeepTexCoords;
 	Basic::texCoords[slupek] = slupeknewTexCoords;
@@ -137,19 +177,21 @@ void load_models() {
 	Basic::texCoords[truck] = trucknewTexCoords;
 	Basic::texCoords[trailer] = trailernewTexCoords;
 	Basic::texCoords[arrow] = arrownewTexCoords; 
+	Basic::texCoords[cube] = Models::CubeInternal::texCoords;
 }
 
 //Procedura inicjująca
 void initOpenGLProgram(GLFWwindow* window) {
     initShaders();
-	Basic::sp = spLambertTextured;
+	//Basic::sp = spLambertTextured;
+	Basic::sp = new ShaderProgram("v_shader.glsl", NULL, "f_shader.glsl");
 	load_models();
 	//************Tutaj umieszczaj kod, który należy wykonać raz, na początku programu************
 	camera = new Camera(glm::vec3(0.0f, 1.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f)); // Tworzy obiekt kamery
 
 	// Inicjalizuje modele na scenie
-	models[0] = new Basic(jeep, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "jeep", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, true);
-	models[1] = new Basic(slupek, glm::vec3(2.0f, 0.2f, 0.0f), glm::vec3(0.05f, 0.05f, 0.05f), "slupeknew", 50.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[0] = new Basic(jeep, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "jeep", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[1] = new Truck(truck, glm::vec3(15.0f, 0.0f, 0.0f), glm::vec3(0.09f, 0.09f, 0.09f), "trucknew", 0.0f, glm::vec3(1.0f, 0.0f, 0.0f), true, false);
 	// Koniec inicjalizacji modeli (ilość modeli w NUM_OF_MODELS_TOTAL
 	
 	glClearColor(1.0f, 1.0f, 0, 1); //Ustaw kolor czyszczenia bufora kolorów
@@ -166,6 +208,13 @@ void freeOpenGLProgram(GLFWwindow* window) {
     freeShaders();
     //************Tutaj umieszczaj kod, który należy wykonać po zakończeniu pętli głównej************
 	//glDeleteTextures(1, &tex);
+	delete camera;
+	delete Basic::sp;
+	delete[] Basic::vertexCount;
+	delete[] Basic::vertices;
+	delete[] Basic::normals;
+	delete[] Basic::texCoords;
+	//delete[] models;
 }
 
 //Procedura rysująca zawartość sceny
@@ -173,12 +222,14 @@ void drawScene(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod rysujący obraz******************l
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 	glm::mat4 V = glm::lookAt(camera->position, camera->position + camera->to_target_vector, glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 P = glm::perspective(glm::radians(50.0f), float(WIDTH/HEIGHT), 1.0f, 50.0f);
+	glm::mat4 P = glm::perspective(glm::radians(50.0f), float(WIDTH/HEIGHT), 1.0f, 100.0f);
 
 	// Kod rysujący
 	Basic::sp->use();
 	glUniformMatrix4fv(Basic::sp->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(Basic::sp->u("V"), 1, false, glm::value_ptr(V));
+
+	glUniform4fv(Basic::sp->u("lp"), 2, LightPos);
 
 	// Rysowanie modeli
 	for (int i = 0; i < NUM_OF_MODELS_TOTAL; i++) {
@@ -197,7 +248,11 @@ void sceneUpdate() {
 	camera->update();
 	for (int i = 0; i < NUM_OF_MODELS_TOTAL; i++) {
 		models[i]->updateRotation();
+		if (i != TRUCK_ID) {
+			((Truck*)models[TRUCK_ID])->collision(models[i]);
+		}
 	}
+	((Truck*)models[TRUCK_ID])->movement(car_movement);
 }
 
 

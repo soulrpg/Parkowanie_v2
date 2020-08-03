@@ -11,6 +11,7 @@ Basic::Basic(Model_type model_type, glm::vec3 transform, glm::vec3 scale, std::s
 	this->is_visible = is_visible;
 	this->is_rotating = is_rotating;
 	texture_handle = readTexture((char*)("Textures/" + texture_name + ".png").c_str());
+	this->setCorners();
 }
 
 void Basic::draw() {
@@ -75,4 +76,34 @@ void Basic::updateRotation() {
 		//angle_y += speed_y * glfwGetTime(); //Oblicz k¹t o jaki obiekt obróci³ siê podczas poprzedniej klatki
 		rotation_angle += 3.0f * glfwGetTime();
 	}
+}
+
+void Basic::setCorners() {
+	float min_x, max_x, min_z, max_z;
+	bool first = true;
+	for (int i = 0; i <= vertexCount[this->model_type] * 4; i+=4){
+		if (first) {
+			min_x = vertices[this->model_type][i];
+			max_x = vertices[this->model_type][i];
+			min_z = vertices[this->model_type][i + 2];
+			max_z = vertices[this->model_type][i + 2];
+			first = false;
+		}
+		if (vertices[this->model_type][i] < min_x) min_x = vertices[this->model_type][i];
+		if (vertices[this->model_type][i] > max_x) max_x = vertices[this->model_type][i];
+		if (vertices[this->model_type][i+2] < min_z) min_z = vertices[this->model_type][i+2];
+		if (vertices[this->model_type][i+2] > max_z) max_z = vertices[this->model_type][i+2];
+	}
+	this->max_vert_x = max_x;
+	this->min_vert_x = min_x;
+	this->max_vert_z = max_z;
+	this->min_vert_z = min_z;
+}
+
+glm::mat4 Basic::getMMatrix() {
+	glm::mat4 M = glm::mat4(1.0f);
+	M = glm::translate(M, transform);
+	M = glm::rotate(M, glm::radians(rotation_angle), rotation);
+	M = glm::scale(M, scale);
+	return M;
 }

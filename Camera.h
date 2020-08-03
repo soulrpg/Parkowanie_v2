@@ -22,6 +22,7 @@ public:
 	bool is_moving;
 	bool backwards;
 	float speed;
+
 	Camera(glm::vec3 position, glm::vec3 target_position);
 	void change_angle(int direction_horizontal, int direction_vertical);
 	void update();

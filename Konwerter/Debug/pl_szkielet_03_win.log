@@ -1,1 +1,13 @@
-﻿  pl_szkielet_03_win.vcxproj -> C:\Users\Michal\Desktop\OpenGL project\Konwerter\Debug\pl_szkielet_03_win.exe
+﻿  cube.cpp
+  lodepng.cpp
+  main_file.cpp
+C:\Users\Michal\Desktop\Parkowanie\Konwerter\main_file.cpp(94,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Michal\Desktop\Parkowanie\Konwerter\main_file.cpp(109,20): warning C4018: '<': signed/unsigned mismatch
+  model.cpp
+  shaderprogram.cpp
+  sphere.cpp
+  teapot.cpp
+  torus.cpp
+  Generating Code...
+C:\Users\Michal\Desktop\Parkowanie\Konwerter\main_file.cpp(123,20): warning C4018: '<': signed/unsigned mismatch
+  pl_szkielet_03_win.vcxproj -> C:\Users\Michal\Desktop\Parkowanie\Konwerter\Debug\pl_szkielet_03_win.exe

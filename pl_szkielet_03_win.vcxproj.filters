@@ -78,6 +78,12 @@
     <ClInclude Include="Basic.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="Arrow.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Truck.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cube.cpp">
@@ -110,6 +116,12 @@
     <ClCompile Include="Basic.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="Arrow.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Truck.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="f_constant.glsl">
@@ -140,6 +152,12 @@
       <Filter>Pliki zasobów</Filter>
     </None>
     <None Include="v_textured.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="f_shader.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="v_shader.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
   </ItemGroup>

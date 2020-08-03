@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="allmodels.h" />
+    <ClInclude Include="Arrow.h" />
     <ClInclude Include="Basic.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="constants.h" />
@@ -40,8 +41,10 @@
     <ClInclude Include="sphere.h" />
     <ClInclude Include="teapot.h" />
     <ClInclude Include="torus.h" />
+    <ClInclude Include="Truck.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Arrow.cpp" />
     <ClCompile Include="Basic.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="cube.cpp" />
@@ -52,17 +55,20 @@
     <ClCompile Include="sphere.cpp" />
     <ClCompile Include="teapot.cpp" />
     <ClCompile Include="torus.cpp" />
+    <ClCompile Include="Truck.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="f_colored.glsl" />
     <None Include="f_constant.glsl" />
     <None Include="f_lambert.glsl" />
     <None Include="f_lamberttextured.glsl" />
+    <None Include="f_shader.glsl" />
     <None Include="f_textured.glsl" />
     <None Include="v_colored.glsl" />
     <None Include="v_constant.glsl" />
     <None Include="v_lambert.glsl" />
     <None Include="v_lamberttextured.glsl" />
+    <None Include="v_shader.glsl" />
     <None Include="v_textured.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

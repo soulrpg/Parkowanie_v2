@@ -14,7 +14,7 @@
 
 namespace model_types {
 	enum Model_type {
-		jeep, slupek, lamp, truck, trailer, arrow
+		jeep, slupek, lamp, truck, trailer, arrow, cube
 	};
 }
 using namespace model_types;
@@ -29,7 +29,7 @@ public:
 	static float** texCoords;
 	static float** normals;
 	static ShaderProgram* sp;
-private:
+protected:
 	glm::vec3 scale;
 	glm::vec3 transform;
 	glm::vec3 rotation;
@@ -39,14 +39,18 @@ private:
 	Model_type model_type;
 	bool is_visible;
 	bool is_rotating;
+public:
+	float min_vert_x, max_vert_x, min_vert_z, max_vert_z;
 
 public:
 	Basic(Model_type model_type, glm::vec3 transform, glm::vec3 scale, std::string texture_name, float rotation_angle, glm::vec3 rotation, bool is_visible, bool is_rotating);
-	void draw();
+	virtual void draw();
 	void translate(glm::vec3 pos);
 	void applyScale();
 	static GLuint readTexture(char* filename);
 	void updateRotation();
+	void setCorners();
+	glm::mat4 getMMatrix();
 };
 
 

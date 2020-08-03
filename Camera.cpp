@@ -20,10 +20,9 @@ void Camera::change_angle(int direction_horizontal, int direction_vertical) {
 		pitch_angle -= 360;
 	if (pitch_angle < 0)
 		pitch_angle += 360;
-	std::cout << "Pitch: " << pitch_angle << std::endl;
+	//std::cout << "Pitch: " << pitch_angle << std::endl;
 
 	float full_vector_length = glm::length(to_target_vector);
-	//std::cout << "Vert l: " << full_vector_length * glm::cos(glm::radians(pitch_angle)) << " Hor l: " << full_vector_length * glm::sin(glm::radians(pitch_angle)) << std::endl;
 	to_target_vector.y = full_vector_length * glm::cos(glm::radians(pitch_angle));
 	//std::cout << "To target vector (x: " << to_target_vector.x << " y: " << to_target_vector.y << " z: " << to_target_vector.z << ")" << std::endl;
 	//std::cout << "Target vector (x: " << position.x + to_target_vector.x << " y: " << position.y + to_target_vector.y << " z: " << position.z + to_target_vector.z << ")" << std::endl;
@@ -39,9 +38,6 @@ void Camera::change_angle(int direction_horizontal, int direction_vertical) {
 	float vector_z = hor_vector_length * glm::cos(glm::radians(yaw_angle));
 	to_target_vector.x = vector_x;
 	to_target_vector.z = vector_z;
-	std::cout << "To target vector length: " << glm::length(to_target_vector) << std::endl;
-	//std::cout << "Target vector (x: " << position.x + to_target_vector.x << " y: " << position.y + to_target_vector.y << " z: " << position.z + to_target_vector.z << ")" << std::endl;
-
 }
 
 // Funkcja sprawdza czy kamera ma wlaczone poruszanie i jezeli tak to przemieszcza ja w kierunku target (zwrot zalezny od boola backwards)
@@ -49,10 +45,17 @@ void Camera::change_angle(int direction_horizontal, int direction_vertical) {
 	void Camera::update() {
 		if (is_moving) {
 			glm::vec3 moving_dir = glm::normalize(to_target_vector) * this->speed;
+			// Moving dir moze zmienic znak i wtedy sie zaczyna syf
 			if (backwards) {
 				moving_dir *= -1;
 			}
+			//std::cout << "To target vector length: " << glm::length(to_target_vector) << std::endl;
+			//std::cout << "Target vector (x: " << position.x + to_target_vector.x << " y: " << position.y + to_target_vector.y << " z: " << position.z + to_target_vector.z << ")" << std::endl;
+			//std::cout << "To Target vector (x: " << to_target_vector.x << " y: " <<  to_target_vector.y << " z: " << to_target_vector.z << ")" << std::endl;
+			//std::cout << "Position (x: " << position.x << " y: " << position.y << " z: " << position.z << ")" << std::endl;
+			//std::cout << "Moving dir (x: " << moving_dir.x << " y: " << moving_dir.y << " z: " << moving_dir.z << ")" << std::endl;
 			position += moving_dir;
-			to_target_vector += moving_dir;
+			//to_target_vector += moving_dir;
+
 		}
 }
