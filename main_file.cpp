@@ -47,11 +47,10 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 // Ilosc modeli na scenie
 #define NUM_OF_MODELS_TOTAL 2
 
+// Miejsce w tablicy modeli, w ktorym znajduje sie ciezarowka (potrzebne do polimorfizmu)
 #define TRUCK_ID 1
 
 Camera* camera;
-
-bool car_movement[4];
 
 // Ilosc unikalnych modeli (typow)
 int Basic::num_of_unique_models = 7;
@@ -60,6 +59,16 @@ int* Basic::vertexCount = new int[num_of_unique_models];
 float** Basic::vertices = new float*[num_of_unique_models];
 float** Basic::normals = new float*[num_of_unique_models];
 float** Basic::texCoords = new float*[num_of_unique_models];
+
+bool W = false;
+bool S = false;
+bool A = false;
+bool D = false;
+
+bool arrow_down = false;
+bool arrow_up = false;
+bool arrow_left = false;
+bool arrow_right = false;
 
 Basic* models[NUM_OF_MODELS_TOTAL];
 
@@ -84,38 +93,70 @@ void key_callback(
 ) {
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
 		std::cout << "W pressed!" << std::endl;
-		car_movement[0] = true;
+		W = true;
 	}
 	if (key == GLFW_KEY_W && action == GLFW_RELEASE) {
 		std::cout << "W released!" << std::endl;
-		car_movement[0] = false;
+		W = false;
 	}
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
 		std::cout << "A pressed!" << std::endl;
-		car_movement[1] = true;
+		A = true;
 	}
 	if (key == GLFW_KEY_A && action == GLFW_RELEASE) {
 		std::cout << "A released!" << std::endl;
-		car_movement[1] = false;
+		A = false;
 	}
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
 		std::cout << "S pressed!" << std::endl;
-		car_movement[2] = true;
+		S = true;
 	}
 	if (key == GLFW_KEY_S && action == GLFW_RELEASE) {
 		std::cout << "S released!" << std::endl;
-		car_movement[2] = false;
-	}
+		S = false;
+	} 
 	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
 		std::cout << "D pressed!" << std::endl;
-		car_movement[3] = true;
+		D = true;
 	}
 	if (key == GLFW_KEY_D && action == GLFW_RELEASE) {
 		std::cout << "D released!" << std::endl;
-		car_movement[3] = false;
+		D = false;
 	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+	if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
+		std::cout << "UP pressed" << std::endl;
+		arrow_up = true;
+	}
+	if (key == GLFW_KEY_UP && action == GLFW_RELEASE) {
+		std::cout << "UP released!" << std::endl;
+		arrow_up = false;
+	}
+	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
+		std::cout << "DOWN pressed" << std::endl;
+		arrow_down = true;
+	}
+	if (key == GLFW_KEY_DOWN && action == GLFW_RELEASE) {
+		std::cout << "DOWN released!" << std::endl;
+		arrow_down = false;
+	}
+	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
+		std::cout << "LEFT pressed" << std::endl;
+		arrow_left = true;
+	}
+	if (key == GLFW_KEY_LEFT && action == GLFW_RELEASE) {
+		std::cout << "LEFT released!" << std::endl;
+		arrow_left = false;
+	}
+	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
+		std::cout << "RIGHT pressed" << std::endl;
+		arrow_right = true;
+	}
+	if (key == GLFW_KEY_RIGHT && action == GLFW_RELEASE) {
+		std::cout << "RIGHT released!" << std::endl;
+		arrow_right = false;
+	}
 
 }
 
@@ -191,7 +232,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 
 	// Inicjalizuje modele na scenie
 	models[0] = new Basic(jeep, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "jeep", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[1] = new Truck(truck, glm::vec3(15.0f, 0.0f, 0.0f), glm::vec3(0.09f, 0.09f, 0.09f), "trucknew", 0.0f, glm::vec3(1.0f, 0.0f, 0.0f), true, false);
+	models[1] = new Truck(truck, glm::vec3(15.0f, 0.0f, 0.0f), glm::vec3(0.09f, 0.09f, 0.09f), "trucknew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	// Koniec inicjalizacji modeli (ilość modeli w NUM_OF_MODELS_TOTAL
 	
 	glClearColor(1.0f, 1.0f, 0, 1); //Ustaw kolor czyszczenia bufora kolorów
@@ -245,6 +286,18 @@ void drawScene(GLFWwindow* window) {
 }
 
 void sceneUpdate() {
+	if (W == true) {
+		if (((Truck*)models[TRUCK_ID])->acceleration <= 0.5f)
+			((Truck*)models[TRUCK_ID])->acceleration += 0.05f;
+	}
+
+	if (S == true) {
+		if (((Truck*)models[TRUCK_ID])->acceleration >= -0.5f)
+			((Truck*)models[TRUCK_ID])->acceleration -= 0.05f;
+	}
+	if (W == false && S == false) {
+		((Truck*)models[TRUCK_ID])->acceleration = 0.0f;
+	}
 	camera->update();
 	for (int i = 0; i < NUM_OF_MODELS_TOTAL; i++) {
 		models[i]->updateRotation();
@@ -252,7 +305,15 @@ void sceneUpdate() {
 			((Truck*)models[TRUCK_ID])->collision(models[i]);
 		}
 	}
-	((Truck*)models[TRUCK_ID])->movement(car_movement);
+	((Truck*)models[TRUCK_ID])->movement();
+	float angle_change = 0.0f;
+	if (A == true) {
+		angle_change = -100.0f;
+	}
+	if (D == true) {
+		angle_change = 100.0f;
+	}
+	((Truck*)models[TRUCK_ID])->change_angle(angle_change * glfwGetTime());
 }
 
 
