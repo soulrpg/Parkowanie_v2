@@ -1,27 +1,3 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (pl_szkielet_03_win.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Camera.cpp
-  Truck.cpp
-  main_file.cpp
-C:\Users\Michal\Desktop\Parkowanie\Models\jeep.h(14184,32): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\jeep.h(28369,32): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\jeep.h(42554,20): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\slupeknew.h(3348,26): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\slupeknew.h(6697,23): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\slupeknew.h(10046,14): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\lampnew.h(216,31): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\lampnew.h(433,23): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\lampnew.h(650,18): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\trucknew.h(29613,28): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\trucknew.h(59227,27): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\trucknew.h(88841,15): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\trailernew.h(15768,31): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\trailernew.h(31537,22): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\trailernew.h(47306,19): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\arrownew.h(112,35): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\arrownew.h(221,24): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\Models\arrownew.h(330,20): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(168,74): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(168,45): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-  Generating Code...
-C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(316,56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   pl_szkielet_03_win.vcxproj -> C:\Users\Michal\Desktop\Parkowanie\Debug\Parkowanie.exe

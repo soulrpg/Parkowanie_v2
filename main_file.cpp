@@ -298,7 +298,7 @@ void sceneUpdate() {
 	if (W == false && S == false) {
 		((Truck*)models[TRUCK_ID])->acceleration = 0.0f;
 	}
-	camera->update();
+	camera->update(arrow_up, arrow_down, arrow_left, arrow_right);
 	for (int i = 0; i < NUM_OF_MODELS_TOTAL; i++) {
 		models[i]->updateRotation();
 		if (i != TRUCK_ID) {

@@ -16,10 +16,14 @@ Camera::Camera(glm::vec3 position, glm::vec3 target_position) {
 void Camera::change_angle(int direction_horizontal, int direction_vertical) {
 	// Obliczenia wertykalne
 	pitch_angle += 360.0f / HEIGHT * direction_vertical;
-	if (pitch_angle > 360) //360
+	/*if (pitch_angle > 360) //360
 		pitch_angle -= 360; 
 	if (pitch_angle < 0)
-		pitch_angle += 360;
+		pitch_angle += 360;*/
+	if (pitch_angle > 179.0f)
+		pitch_angle = 179.0f;
+	if (pitch_angle < -179.0f)
+		pitch_angle = -179.0f;
 	std::cout << "Pitch: " << pitch_angle << std::endl;
 
 	float full_vector_length = glm::length(to_target_vector);
@@ -44,7 +48,7 @@ void Camera::change_angle(int direction_horizontal, int direction_vertical) {
 
 // Funkcja sprawdza czy kamera ma wlaczone poruszanie i jezeli tak to przemieszcza ja w kierunku target (zwrot zalezny od boola backwards)
 // Jest wywolywana w kazdym przejsciu glownej petli
-	void Camera::update() {
+	void Camera::update(bool arrow_up, bool arrow_down, bool arrow_left, bool arrow_right) {
 		if (is_moving) {
 			glm::vec3 moving_dir = glm::normalize(to_target_vector) * this->speed;
 			// Moving dir moze zmienic znak i wtedy sie zaczyna syf
@@ -56,8 +60,22 @@ void Camera::change_angle(int direction_horizontal, int direction_vertical) {
 			//std::cout << "To Target vector (x: " << to_target_vector.x << " y: " <<  to_target_vector.y << " z: " << to_target_vector.z << ")" << std::endl;
 			//std::cout << "Position (x: " << position.x << " y: " << position.y << " z: " << position.z << ")" << std::endl;
 			//std::cout << "Moving dir (x: " << moving_dir.x << " y: " << moving_dir.y << " z: " << moving_dir.z << ")" << std::endl;
-			position += moving_dir;
+			position += moving_dir * float(glfwGetTime()) * 20.0f;
 			//to_target_vector += moving_dir;
 
+		}
+		glm::vec3 moving_hor = glm::normalize(glm::cross(to_target_vector, glm::vec3(0.0f, 1.0f, 0.0f)));
+		glm::vec3 moving_ver = glm::normalize(glm::cross(moving_hor, to_target_vector));
+		if (arrow_up) {
+			position += moving_ver * this->speed * 20.0f * float(glfwGetTime());
+		}
+		if (arrow_down) {
+			position -= moving_ver * this->speed * 20.0f * float(glfwGetTime());
+		}
+		if (arrow_left) {
+			position -= moving_hor * this->speed * 20.0f * float(glfwGetTime());
+		}
+		if (arrow_right) {
+			position += moving_hor * this->speed * 20.0f * float(glfwGetTime());
 		}
 }
