@@ -8,7 +8,6 @@ private:
 	//float car_heading_angle;
 	float car_speed;
 	float steer_angle;
-	float wheel_base;
 	float friction;
 	bool can_move;
 	bool accelerating_forwards;

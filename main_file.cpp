@@ -44,6 +44,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "cube.h"
 #include "Truck.h"
 
+
 // Ilosc modeli na scenie
 #define NUM_OF_MODELS_TOTAL 2
 
@@ -232,7 +233,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 
 	// Inicjalizuje modele na scenie
 	models[0] = new Basic(jeep, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "jeep", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[1] = new Truck(truck, glm::vec3(15.0f, 0.0f, 0.0f), glm::vec3(0.09f, 0.09f, 0.09f), "trucknew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[1] = new Truck(truck, glm::vec3(15.0f, 0.0f, 0.0f), glm::vec3(0.09f, 0.09f, 0.09f), "trucknew", -90.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	// Koniec inicjalizacji modeli (ilość modeli w NUM_OF_MODELS_TOTAL
 	
 	glClearColor(1.0f, 1.0f, 0, 1); //Ustaw kolor czyszczenia bufora kolorów

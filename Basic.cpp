@@ -98,6 +98,7 @@ void Basic::setCorners() {
 	this->min_vert_x = min_x;
 	this->max_vert_z = max_z;
 	this->min_vert_z = min_z;
+	//std::cout << "Max x: " << max_x << " min x: " << min_x << " max z: " << max_z << " min z: " << min_z << std::endl;
 }
 
 glm::mat4 Basic::getMMatrix() {
