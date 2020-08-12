@@ -1,5 +1,5 @@
 #version 330
-const int MAX_LIGHTS = 3;
+const int MAX_LIGHTS = 4;
 
 //Zmienne jednorodne
 uniform mat4 P;

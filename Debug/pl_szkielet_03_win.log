@@ -24,7 +24,7 @@ C:\Users\Michal\Desktop\Parkowanie\Models\diamondnew.h(1154,19): warning C4305: 
 C:\Users\Michal\Desktop\Parkowanie\Models\wheel.h(684,32): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\Michal\Desktop\Parkowanie\Models\wheel.h(1369,29): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\Michal\Desktop\Parkowanie\Models\wheel.h(2054,16): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(176,74): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(176,45): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(389,56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(192,74): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(192,45): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(435,56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   pl_szkielet_03_win.vcxproj -> C:\Users\Michal\Desktop\Parkowanie\Debug\Parkowanie.exe

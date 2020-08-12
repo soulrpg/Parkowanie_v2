@@ -49,12 +49,13 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 
 
 // Ilosc modeli na scenie
-#define NUM_OF_MODELS_TOTAL 4
+#define NUM_OF_MODELS_TOTAL 34
 #define NUM_OF_BOXES 6
 
 // Miejsce w tablicy modeli, w ktorym znajduje sie ciezarowka (potrzebne do polimorfizmu)
 #define TRUCK_ID 1
 #define GROUND_ID 2
+#define TEST_ID 3
 
 Camera* camera;
 
@@ -82,9 +83,10 @@ Sky* boxes[6];
 ShaderProgram* Basic::sp;
 
 float LightPos[] = {
-	20.0f, 5.0f, 0.0f, 1.0f,
-	-20.0f, 5.0f, 0.0f, 1.0f,
-	-40.0f, 5.0f, 0.0f, 1.0f,
+	-27.0f, 5.0f, -42.0f, 1.0f,
+	54.0f, 5.0f, -50.0f, 1.0f,
+	54.0f, 5.0f, 45.0f, 1.0f,
+	26.0f, 5.0f, -2.0f, 1.0f,
 };
 
 //Procedura obsługi błędów
@@ -165,7 +167,21 @@ void key_callback(
 		std::cout << "RIGHT released!" << std::endl;
 		arrow_right = false;
 	}
-
+	if (key == GLFW_KEY_I && action == GLFW_PRESS) {
+		models[TEST_ID]->translate(models[TEST_ID]->transform + glm::vec3(1.0f, 0.0f, 0.0f));
+	}
+	if (key == GLFW_KEY_K && action == GLFW_PRESS) {
+		models[TEST_ID]->translate(models[TEST_ID]->transform - glm::vec3(1.0f, 0.0f, 0.0f));
+	}
+	if (key == GLFW_KEY_J && action == GLFW_PRESS) {
+		models[TEST_ID]->translate(models[TEST_ID]->transform - glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+	if (key == GLFW_KEY_L && action == GLFW_PRESS) {
+		models[TEST_ID]->translate(models[TEST_ID]->transform + glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+	if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
+		std::cout << "Transform: x: " << models[TEST_ID]->transform.x << " z: " << models[TEST_ID]->transform.z << std::endl;
+	}
 }
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
@@ -251,7 +267,37 @@ void initOpenGLProgram(GLFWwindow* window) {
 	models[1] = new Truck(truck, glm::vec3(15.0f, 0.0f, 0.0f), glm::vec3(0.09f, 0.09f, 0.09f), "trucknew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f),
 		true, false, glm::vec3(1.45f, 0.9f, 3.2f), glm::vec3(-0.85f, 0.9f, 3.2f));
 	models[2] = new Basic(cube, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(75.0f, 0.05f, 75.0f), "podloze", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[3] = new Basic(cube, glm::vec3(70.0f, 0.1f, 70.53f), glm::vec3(1.0f, 1.0f, 5.64f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[3] = new Basic(lamp, glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[4] = new Basic(cube, glm::vec3(19.0f, 1.0f, 12.0f), glm::vec3(9.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[5] = new Basic(cube, glm::vec3(19.0f, 1.0f, -17.0f), glm::vec3(9.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[6] = new Basic(cube, glm::vec3(-17.0f, 1.0f, 19.0f), glm::vec3(11.8f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[7] = new Basic(cube, glm::vec3(-36.0f, 1.0f, -10.0f), glm::vec3(8.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[8] = new Basic(cube, glm::vec3(-28.0f, 1.0f, 4.3f), glm::vec3(1.0f, 0.5f, 13.5f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[9] = new Basic(cube, glm::vec3(28.0f, 1.0f, -3.0f), glm::vec3(1.0f, 0.5f, 14.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[10] = new Basic(cube, glm::vec3(16.0f, 1.0f, 41.0f), glm::vec3(22.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[11] = new Basic(cube, glm::vec3(33.0f, 1.0f, 25.0f), glm::vec3(22.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[12] = new Basic(cube, glm::vec3(0.0f, 1.0f, -39.0f), glm::vec3(26.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[13] = new Basic(cube, glm::vec3(32.0f, 1.0f, -23.0f), glm::vec3(22.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[14] = new Basic(cube, glm::vec3(-35.0f, 1.0f, -53.0f), glm::vec3(9.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[15] = new Basic(cube, glm::vec3(48.0f, 1.0f, 66.0f), glm::vec3(9.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[16] = new Basic(cube, glm::vec3(41.0f, 1.0f, -61.0f), glm::vec3(16.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[17] = new Basic(cube, glm::vec3(61.0f, 1.0f, -32.0f), glm::vec3(6.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[18] = new Basic(cube, glm::vec3(61.0f, 1.0f, -50.0f), glm::vec3(6.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[19] = new Basic(cube, glm::vec3(10.0f, 1.0f,  19.1f), glm::vec3(1.0f, 0.5f, 6.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[20] = new Basic(cube, glm::vec3(-6.0f, 1.0f, 30.0f), glm::vec3(1.0f, 0.5f, 10.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[21] = new Basic(cube, glm::vec3(-43.0f, 1.0f, -31.3f), glm::vec3(1.0f, 0.5f, 20.5f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[22] = new Basic(cube, glm::vec3(-25.0f, 1.0f, -47.0f), glm::vec3(1.0f, 0.5f, 7.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[23] = new Basic(cube, glm::vec3(38.0f, 1.0f, 54.0f), glm::vec3(1.0f, 0.5f, 12.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[24] = new Basic(cube, glm::vec3(56.0f, 1.0f, 45.0f), glm::vec3(1.0f, 0.5f, 20.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[25] = new Basic(cube, glm::vec3(11.0f, 1.0f, -20.0f), glm::vec3(1.0f, 0.5f, 2.2f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[26] = new Basic(cube, glm::vec3(26.0f, 1.0f, -50.0f), glm::vec3(1.0f, 0.5f, 10.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[27] = new Basic(cube, glm::vec3(55.0f, 1.0f, -27.0f), glm::vec3(1.0f, 0.5f, 4.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[28] = new Basic(cube, glm::vec3(68.0f, 1.0f, -41.0f), glm::vec3(1.0f, 0.5f, 10.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[29] = new Basic(cube, glm::vec3(56.0f, 1.0f, -55.5f), glm::vec3(1.0f, 0.5f, 4.5f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[30] = new Basic(lamp, glm::vec3(-27.0f, 1.0f, -42.0f), glm::vec3(2.0f, 2.0f, 2.0f), "lampnew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[31] = new Basic(lamp, glm::vec3(54.0f, 1.0f, -50.0f), glm::vec3(2.0f, 2.0f, 2.0f), "lampnew", 90.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[32] = new Basic(lamp, glm::vec3(54.0f, 1.0f, 45.0f), glm::vec3(2.0f, 2.0f, 2.0f), "lampnew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[33] = new Basic(lamp, glm::vec3(26.0f, 1.0f, -2.0f), glm::vec3(2.0f, 2.0f, 2.0f), "lampnew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	
 	
 	boxes[0] = new Sky(cube, glm::vec3(500.0f, 0.0f, 0.0f), glm::vec3(0.1f, 502.0f, 502.0f), "skybox_left", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
@@ -316,7 +362,7 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(Basic::sp->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(Basic::sp->u("V"), 1, false, glm::value_ptr(V));
 
-	glUniform4fv(Basic::sp->u("lp"), 3, LightPos);
+	glUniform4fv(Basic::sp->u("lp"), 4, LightPos);
 
 	// Rysowanie modeli
 	for (int i = 0; i < NUM_OF_MODELS_TOTAL; i++) {

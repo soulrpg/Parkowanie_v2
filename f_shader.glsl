@@ -1,5 +1,5 @@
 #version 330
-const int MAX_LIGHTS = 3;
+const int MAX_LIGHTS = 4;
 const float shineDumper = 7;
 const float reflectivity = 0.3;
 const vec4 lightColour = vec4(1,1,1,1);

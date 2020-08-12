@@ -29,9 +29,10 @@ public:
 	static float** texCoords;
 	static float** normals;
 	static ShaderProgram* sp;
+	glm::vec3 transform;
 protected:
 	glm::vec3 scale;
-	glm::vec3 transform;
+	
 	glm::vec3 rotation;
 	float rotation_angle;
 	std::string texture_name;
