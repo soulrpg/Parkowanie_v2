@@ -38,24 +38,28 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "Models/trucknew.h"
 #include "Models/trailernew.h"
 #include "Models/arrownew.h"
+#include "Models/diamondnew.h"
 #include "Camera.h"
 #include "Basic.h"
 #include "Arrow.h"
 #include "Models/wheel.h"
 #include "cube.h"
 #include "Truck.h"
+#include "Sky.h"
 
 
 // Ilosc modeli na scenie
-#define NUM_OF_MODELS_TOTAL 3
+#define NUM_OF_MODELS_TOTAL 4
+#define NUM_OF_BOXES 6
 
 // Miejsce w tablicy modeli, w ktorym znajduje sie ciezarowka (potrzebne do polimorfizmu)
 #define TRUCK_ID 1
+#define GROUND_ID 2
 
 Camera* camera;
 
 // Ilosc unikalnych modeli (typow)
-int Basic::num_of_unique_models = 8;
+int Basic::num_of_unique_models = 9;
 
 int* Basic::vertexCount = new int[num_of_unique_models];
 float** Basic::vertices = new float*[num_of_unique_models];
@@ -73,12 +77,14 @@ bool arrow_left = false;
 bool arrow_right = false;
 
 Basic* models[NUM_OF_MODELS_TOTAL];
+Sky* boxes[6];
 
 ShaderProgram* Basic::sp;
 
 float LightPos[] = {
-	20.0f, 0.0f, 0.0f, 1.0f,
-	-20.0f, 0.0f, 0.0f, 1.0f
+	20.0f, 5.0f, 0.0f, 1.0f,
+	-20.0f, 5.0f, 0.0f, 1.0f,
+	-40.0f, 5.0f, 0.0f, 1.0f,
 };
 
 //Procedura obsługi błędów
@@ -197,6 +203,7 @@ void load_models() {
 	Basic::vertexCount[trailer] = trailernewVertexCount;
 	Basic::vertexCount[arrow] = arrownewVertexCount;
 	Basic::vertexCount[wheel] = wheelVertexCount;
+	Basic::vertexCount[diamond] = diamondnewVertexCount;
 	Basic::vertexCount[cube] = Models::CubeInternal::vertexCount;
 
 	Basic::vertices[jeep] = jeepVertices;
@@ -206,6 +213,7 @@ void load_models() {
 	Basic::vertices[trailer] = trailernewVertices;
 	Basic::vertices[arrow] = arrownewVertices;
 	Basic::vertices[wheel] = wheelVertices;
+	Basic::vertices[diamond] = diamondnewVertices;
 	Basic::vertices[cube] = Models::CubeInternal::vertices;
 
 	Basic::normals[jeep] = jeepNormals;
@@ -215,6 +223,7 @@ void load_models() {
 	Basic::normals[trailer] = trailernewNormals;
 	Basic::normals[arrow] = arrownewNormals;
 	Basic::normals[wheel] = wheelNormals;
+	Basic::normals[diamond] = diamondnewNormals;
 	Basic::normals[cube] = Models::CubeInternal::normals;
 
 	Basic::texCoords[jeep] = jeepTexCoords;
@@ -224,6 +233,7 @@ void load_models() {
 	Basic::texCoords[trailer] = trailernewTexCoords;
 	Basic::texCoords[arrow] = arrownewTexCoords; 
 	Basic::texCoords[wheel] = wheelTexCoords; 
+	Basic::texCoords[diamond] = diamondnewTexCoords; 
 	Basic::texCoords[cube] = Models::CubeInternal::texCoords;
 }
 
@@ -240,7 +250,16 @@ void initOpenGLProgram(GLFWwindow* window) {
 	models[0] = new Basic(jeep, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "jeep", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	models[1] = new Truck(truck, glm::vec3(15.0f, 0.0f, 0.0f), glm::vec3(0.09f, 0.09f, 0.09f), "trucknew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f),
 		true, false, glm::vec3(1.45f, 0.9f, 3.2f), glm::vec3(-0.85f, 0.9f, 3.2f));
-	models[2] = new Basic(cube, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(50.0f, 0.05f, 50.0f), "", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[2] = new Basic(cube, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(75.0f, 0.05f, 75.0f), "podloze", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[3] = new Basic(cube, glm::vec3(70.0f, 0.1f, 70.53f), glm::vec3(1.0f, 1.0f, 5.64f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	
+	
+	boxes[0] = new Sky(cube, glm::vec3(500.0f, 0.0f, 0.0f), glm::vec3(0.1f, 502.0f, 502.0f), "skybox_left", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	boxes[1] = new Sky(cube, glm::vec3(-500.0f, 0.0f, 0.0f), glm::vec3(0.1f, 502.0f, 502.0f), "skybox_right", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	boxes[2] = new Sky(cube, glm::vec3(0.0f, 0.0f, 500.0f), glm::vec3(502.0f, 502.0f, 0.1f), "skybox_back", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	boxes[3] = new Sky(cube, glm::vec3(0.0f, 0.0f, -500.0f), glm::vec3(502.0f, 502.0f, 0.1f), "skybox_middle", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	boxes[4] = new Sky(cube, glm::vec3(0.0f, 500.0f, 0.0f), glm::vec3(502.0f, 0.1f, 502.1f), "skybox_top", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	boxes[5] = new Sky(cube, glm::vec3(0.0f, -500.0f, 0.0f), glm::vec3(502.0f, 0.1f, 502.1f), "skybox_bottom", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	// Koniec inicjalizacji modeli (ilość modeli w NUM_OF_MODELS_TOTAL
 	
 	glClearColor(1.0f, 1.0f, 0, 1); //Ustaw kolor czyszczenia bufora kolorów
@@ -284,25 +303,35 @@ void drawPoint(glm::vec4 point) {
 	glDisableVertexAttribArray(Basic::sp->a("normal"));
 }
 
+
 //Procedura rysująca zawartość sceny
 void drawScene(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod rysujący obraz******************l
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 	glm::mat4 V = glm::lookAt(camera->position, camera->position + camera->to_target_vector, glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 P = glm::perspective(glm::radians(50.0f), float(WIDTH/HEIGHT), 1.0f, 200.0f);
+	glm::mat4 P = glm::perspective(glm::radians(50.0f), float(WIDTH/HEIGHT), 1.0f, 1000.0f);
 
 	// Kod rysujący
 	Basic::sp->use();
 	glUniformMatrix4fv(Basic::sp->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(Basic::sp->u("V"), 1, false, glm::value_ptr(V));
 
-	glUniform4fv(Basic::sp->u("lp"), 2, LightPos);
+	glUniform4fv(Basic::sp->u("lp"), 3, LightPos);
 
 	// Rysowanie modeli
 	for (int i = 0; i < NUM_OF_MODELS_TOTAL; i++) {
 		models[i]->draw(); 
 	}
+	
+	spLambertTextured->use();
+	glUniformMatrix4fv(spLambertTextured->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(spLambertTextured->u("V"), 1, false, glm::value_ptr(V));
 
+	for (int i = 0; i < NUM_OF_BOXES; i++) {
+		boxes[i]->draw();
+	}
+
+	/*
 	glm::mat4 t_matrix = models[TRUCK_ID]->getMMatrix();
 	glm::vec4 point_1 = t_matrix * glm::vec4(((Truck*)models[TRUCK_ID])->max_vert_x, 5.0f, ((Truck*)models[TRUCK_ID])->max_vert_z, 1.0f);
 	glm::vec4 point_2 = t_matrix * glm::vec4(((Truck*)models[TRUCK_ID])->min_vert_x, 5.0f, ((Truck*)models[TRUCK_ID])->max_vert_z, 1.0f);
@@ -325,6 +354,7 @@ void drawScene(GLFWwindow* window) {
 	drawPoint(point_2);
 	drawPoint(point_3);
 	drawPoint(point_4);
+	*/
 
     //glDisable(GL_CULL_FACE);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -357,14 +387,12 @@ void sceneUpdate() {
 		angle_change = 100.0f;
 	}
 	((Truck*)models[TRUCK_ID])->change_angle(angle_change * glfwGetTime());
-	((Truck*)models[TRUCK_ID])->collision(models[0]);
-	/*
 	for (int i = 0; i < NUM_OF_MODELS_TOTAL; i++) {
 		models[i]->updateRotation();
-		if (i != TRUCK_ID) {
+		if (i != TRUCK_ID && i!= GROUND_ID) {
 			((Truck*)models[TRUCK_ID])->collision(models[i]);
 		}
-	}*/
+	}
 }
 
 

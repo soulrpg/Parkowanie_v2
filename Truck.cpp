@@ -210,7 +210,16 @@ bool Truck::collision(Basic* other) {
 		point_in_triangle(t_point_3, o_point_1, o_point_2, o_point_3) ||
 		point_in_triangle(t_point_3, o_point_1, o_point_2, o_point_4) ||
 		point_in_triangle(t_point_4, o_point_1, o_point_2, o_point_3) ||
-		point_in_triangle(t_point_4, o_point_1, o_point_2, o_point_4)) {
+		point_in_triangle(t_point_4, o_point_1, o_point_2, o_point_4) ||
+		point_in_triangle(o_point_1, t_point_1, t_point_2, t_point_3) ||
+		point_in_triangle(o_point_1, t_point_1, t_point_2, t_point_4) ||
+		point_in_triangle(o_point_2, t_point_1, t_point_2, t_point_3) ||
+		point_in_triangle(o_point_2, t_point_1, t_point_2, t_point_4) ||
+		point_in_triangle(o_point_3, t_point_1, t_point_2, t_point_3) ||
+		point_in_triangle(o_point_3, t_point_1, t_point_2, t_point_4) ||
+		point_in_triangle(o_point_4, t_point_1, t_point_2, t_point_3) ||
+		point_in_triangle(o_point_4, t_point_1, t_point_2, t_point_4))
+	{
 		std::cout << "Kolizja!" << std::endl;
 		return true;
 	}

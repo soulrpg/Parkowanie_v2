@@ -28,6 +28,7 @@
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="Models\arrownew.h" />
+    <ClInclude Include="Models\diamondnew.h" />
     <ClInclude Include="Models\jeep.h" />
     <ClInclude Include="Models\lampnew.h" />
     <ClInclude Include="Models\slupek.h" />
@@ -39,6 +40,7 @@
     <ClInclude Include="Models\wheel.h" />
     <ClInclude Include="myCube.h" />
     <ClInclude Include="shaderprogram.h" />
+    <ClInclude Include="Sky.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="teapot.h" />
     <ClInclude Include="torus.h" />
@@ -53,6 +55,7 @@
     <ClCompile Include="main_file.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="shaderprogram.cpp" />
+    <ClCompile Include="Sky.cpp" />
     <ClCompile Include="sphere.cpp" />
     <ClCompile Include="teapot.cpp" />
     <ClCompile Include="torus.cpp" />

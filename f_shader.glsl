@@ -1,7 +1,7 @@
 #version 330
-const int MAX_LIGHTS = 2;
-const float shineDumper = 2;
-const float reflectivity = 0.7;
+const int MAX_LIGHTS = 3;
+const float shineDumper = 7;
+const float reflectivity = 0.3;
 const vec4 lightColour = vec4(1,1,1,1);
 
 uniform sampler2D tex;

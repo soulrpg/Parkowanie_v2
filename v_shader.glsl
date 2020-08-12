@@ -1,14 +1,14 @@
 #version 330
-const int MAX_LIGHTS = 2;
+const int MAX_LIGHTS = 3;
 
 //Zmienne jednorodne
 uniform mat4 P;
 uniform mat4 V;
 uniform mat4 M;
 
-uniform vec4 lp[2];//={vec4(20,0,0,1),vec4(-20,0,0,1)}; //trzeba jeszcze zrobiæ by to w funkcji przekazaæ
+uniform vec4 lp[MAX_LIGHTS];//={vec4(20,0,0,1),vec4(-20,0,0,1)}; //trzeba jeszcze zrobiæ by to w funkcji przekazaæ
 
-uniform vec4 lightDir=vec4(0,0,1,0);
+uniform vec4 lightDir=vec4(0,-1,0,0);
 
 //Atrybuty
 layout (location=0) in vec4 vertex; //wspolrzedne wierzcholka w przestrzeni modelu
