@@ -5,8 +5,11 @@ typedef struct _vec2 vec2;
 
 int start(vec2* vertices1, vec2* vertices2);
 
-Truck::Truck(Model_type model_type, glm::vec3 transform, glm::vec3 scale, std::string texture_name, float rotation_angle, glm::vec3 rotation, bool is_visible, bool is_rotating)
+Truck::Truck(Model_type model_type, glm::vec3 transform, glm::vec3 scale, std::string texture_name, float rotation_angle, glm::vec3 rotation,
+	bool is_visible, bool is_rotating, glm::vec3 transform_wheel_1, glm::vec3 transform_wheel_2)
 	:Basic(model_type, transform, scale, texture_name, rotation_angle, rotation, is_visible, is_rotating) {
+	this->transform_wheel_1 = transform_wheel_1;
+	this->transform_wheel_2 = transform_wheel_2;
 	car_speed = 0.0f;
 	steer_angle = 0.0f;
 	can_move = true;
@@ -90,6 +93,79 @@ void Truck::movement() {
 	//std::cout << "Rotation angle: " << this->rotation_angle << std::endl;
 }
 
+void Truck::draw() {
+	if (this->is_visible)
+	{
+		Basic::sp->use();
+		glm::mat4 M = glm::mat4(1.0f);
+		M = glm::translate(M, transform);
+		M = glm::rotate(M, glm::radians(rotation_angle), rotation);
+		glm::mat4 M2 = M;
+		M = glm::scale(M, scale);
+		glUniformMatrix4fv(Basic::sp->u("M"), 1, false, glm::value_ptr(M));
+		glEnableVertexAttribArray(Basic::sp->a("vertex"));
+		glVertexAttribPointer(Basic::sp->a("vertex"), 4, GL_FLOAT, false, 0, Basic::vertices[model_type]);
+
+		glEnableVertexAttribArray(Basic::sp->a("normal"));
+		glVertexAttribPointer(Basic::sp->a("normal"), 4, GL_FLOAT, false, 0, Basic::normals[model_type]);
+
+		glEnableVertexAttribArray(Basic::sp->a("texCoord"));
+		glVertexAttribPointer(Basic::sp->a("texCoord"), 2, GL_FLOAT, false, 0, Basic::texCoords[model_type]);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture_handle);
+		glUniform1i(sp->u("tex"), 0);
+		glDrawArrays(GL_TRIANGLES, 0, Basic::vertexCount[model_type]);
+		glDisableVertexAttribArray(Basic::sp->a("vertex"));
+		glDisableVertexAttribArray(Basic::sp->a("normal"));
+		glDisableVertexAttribArray(Basic::sp->a("texCoord"));
+
+		// WHEEL 1
+		M = glm::translate(M2, transform_wheel_1);
+		M = glm::rotate(M, glm::radians(-steer_angle + 180.f), rotation);
+		M = glm::scale(M, scale);
+		glUniformMatrix4fv(Basic::sp->u("M"), 1, false, glm::value_ptr(M));
+		glEnableVertexAttribArray(Basic::sp->a("vertex"));
+		glVertexAttribPointer(Basic::sp->a("vertex"), 4, GL_FLOAT, false, 0, Basic::vertices[wheel]);
+
+		glEnableVertexAttribArray(Basic::sp->a("normal"));
+		glVertexAttribPointer(Basic::sp->a("normal"), 4, GL_FLOAT, false, 0, Basic::normals[wheel]);
+
+		glEnableVertexAttribArray(Basic::sp->a("texCoord"));
+		glVertexAttribPointer(Basic::sp->a("texCoord"), 2, GL_FLOAT, false, 0, Basic::texCoords[wheel]);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture_handle);
+		glUniform1i(sp->u("tex"), 0);
+		glDrawArrays(GL_TRIANGLES, 0, Basic::vertexCount[wheel]);
+		glDisableVertexAttribArray(Basic::sp->a("vertex"));
+		glDisableVertexAttribArray(Basic::sp->a("normal"));
+		glDisableVertexAttribArray(Basic::sp->a("texCoord"));
+
+		// WHEEL 2
+		M = glm::translate(M2, transform_wheel_2);
+		M = glm::rotate(M, glm::radians(-steer_angle), rotation);
+		M = glm::scale(M, scale);
+		glUniformMatrix4fv(Basic::sp->u("M"), 1, false, glm::value_ptr(M));
+		glEnableVertexAttribArray(Basic::sp->a("vertex"));
+		glVertexAttribPointer(Basic::sp->a("vertex"), 4, GL_FLOAT, false, 0, Basic::vertices[wheel]);
+
+		glEnableVertexAttribArray(Basic::sp->a("normal"));
+		glVertexAttribPointer(Basic::sp->a("normal"), 4, GL_FLOAT, false, 0, Basic::normals[wheel]);
+
+		glEnableVertexAttribArray(Basic::sp->a("texCoord"));
+		glVertexAttribPointer(Basic::sp->a("texCoord"), 2, GL_FLOAT, false, 0, Basic::texCoords[wheel]);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture_handle);
+		glUniform1i(sp->u("tex"), 0);
+		glDrawArrays(GL_TRIANGLES, 0, Basic::vertexCount[wheel]);
+		glDisableVertexAttribArray(Basic::sp->a("vertex"));
+		glDisableVertexAttribArray(Basic::sp->a("normal"));
+		glDisableVertexAttribArray(Basic::sp->a("texCoord"));
+	}
+}
+
 bool Truck::collision(Basic* other) {
 	glm::mat4 otherM = other->getMMatrix();
 	glm::mat4 truckM = this->getMMatrix();
@@ -146,10 +222,10 @@ bool Truck::collision(Basic* other) {
 void Truck::change_angle(float value) {
 	this->steer_angle += value;
 	//std::cout << "Steer angle: " << steer_angle << std::endl;
-	if (this->steer_angle > 90.0f)
-		this->steer_angle = 90.0f;
-	if (this->steer_angle < -90.0f)
-		this->steer_angle = -90.0f;
+	if (this->steer_angle > 50.0f)
+		this->steer_angle = 50.0f;
+	if (this->steer_angle < -50.0f)
+		this->steer_angle = -50.0f;
 }
 
 //-----------------------------------------------------------------------------

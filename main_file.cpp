@@ -41,6 +41,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "Camera.h"
 #include "Basic.h"
 #include "Arrow.h"
+#include "Models/wheel.h"
 #include "cube.h"
 #include "Truck.h"
 
@@ -54,7 +55,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 Camera* camera;
 
 // Ilosc unikalnych modeli (typow)
-int Basic::num_of_unique_models = 7;
+int Basic::num_of_unique_models = 8;
 
 int* Basic::vertexCount = new int[num_of_unique_models];
 float** Basic::vertices = new float*[num_of_unique_models];
@@ -195,6 +196,7 @@ void load_models() {
 	Basic::vertexCount[truck] = trucknewVertexCount;
 	Basic::vertexCount[trailer] = trailernewVertexCount;
 	Basic::vertexCount[arrow] = arrownewVertexCount;
+	Basic::vertexCount[wheel] = wheelVertexCount;
 	Basic::vertexCount[cube] = Models::CubeInternal::vertexCount;
 
 	Basic::vertices[jeep] = jeepVertices;
@@ -203,6 +205,7 @@ void load_models() {
 	Basic::vertices[truck] = trucknewVertices;
 	Basic::vertices[trailer] = trailernewVertices;
 	Basic::vertices[arrow] = arrownewVertices;
+	Basic::vertices[wheel] = wheelVertices;
 	Basic::vertices[cube] = Models::CubeInternal::vertices;
 
 	Basic::normals[jeep] = jeepNormals;
@@ -211,6 +214,7 @@ void load_models() {
 	Basic::normals[truck] = trucknewNormals;
 	Basic::normals[trailer] = trailernewNormals;
 	Basic::normals[arrow] = arrownewNormals;
+	Basic::normals[wheel] = wheelNormals;
 	Basic::normals[cube] = Models::CubeInternal::normals;
 
 	Basic::texCoords[jeep] = jeepTexCoords;
@@ -219,6 +223,7 @@ void load_models() {
 	Basic::texCoords[truck] = trucknewTexCoords;
 	Basic::texCoords[trailer] = trailernewTexCoords;
 	Basic::texCoords[arrow] = arrownewTexCoords; 
+	Basic::texCoords[wheel] = wheelTexCoords; 
 	Basic::texCoords[cube] = Models::CubeInternal::texCoords;
 }
 
@@ -233,7 +238,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 
 	// Inicjalizuje modele na scenie
 	models[0] = new Basic(jeep, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "jeep", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[1] = new Truck(truck, glm::vec3(15.0f, 0.0f, 0.0f), glm::vec3(0.09f, 0.09f, 0.09f), "trucknew", -90.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[1] = new Truck(truck, glm::vec3(15.0f, 0.0f, 0.0f), glm::vec3(0.09f, 0.09f, 0.09f), "trucknew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f),
+		true, false, glm::vec3(1.45f, 0.9f, 3.2f), glm::vec3(-0.85f, 0.9f, 3.2f));
 	// Koniec inicjalizacji modeli (ilość modeli w NUM_OF_MODELS_TOTAL
 	
 	glClearColor(1.0f, 1.0f, 0, 1); //Ustaw kolor czyszczenia bufora kolorów

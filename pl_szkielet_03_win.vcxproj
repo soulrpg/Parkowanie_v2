@@ -36,6 +36,7 @@
     <ClInclude Include="Models\trailernew.h" />
     <ClInclude Include="Models\truck.h" />
     <ClInclude Include="Models\trucknew.h" />
+    <ClInclude Include="Models\wheel.h" />
     <ClInclude Include="myCube.h" />
     <ClInclude Include="shaderprogram.h" />
     <ClInclude Include="sphere.h" />
