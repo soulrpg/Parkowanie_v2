@@ -47,7 +47,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 
 
 // Ilosc modeli na scenie
-#define NUM_OF_MODELS_TOTAL 2
+#define NUM_OF_MODELS_TOTAL 3
 
 // Miejsce w tablicy modeli, w ktorym znajduje sie ciezarowka (potrzebne do polimorfizmu)
 #define TRUCK_ID 1
@@ -240,6 +240,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	models[0] = new Basic(jeep, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "jeep", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	models[1] = new Truck(truck, glm::vec3(15.0f, 0.0f, 0.0f), glm::vec3(0.09f, 0.09f, 0.09f), "trucknew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f),
 		true, false, glm::vec3(1.45f, 0.9f, 3.2f), glm::vec3(-0.85f, 0.9f, 3.2f));
+	models[2] = new Basic(cube, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(50.0f, 0.05f, 50.0f), "", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	// Koniec inicjalizacji modeli (ilość modeli w NUM_OF_MODELS_TOTAL
 	
 	glClearColor(1.0f, 1.0f, 0, 1); //Ustaw kolor czyszczenia bufora kolorów
@@ -265,12 +266,30 @@ void freeOpenGLProgram(GLFWwindow* window) {
 	//delete[] models;
 }
 
+void drawPoint(glm::vec4 point) {
+	glm::vec3 point_3 = glm::vec3(point.x, point.y, point.z);
+	Basic::sp->use();
+	glm::mat4 M = glm::mat4(1.0f);
+	M = glm::translate(M, point_3);
+	M = glm::scale(M, glm::vec3(0.2f, 0.2f, 0.2f));
+	glUniformMatrix4fv(Basic::sp->u("M"), 1, false, glm::value_ptr(M));
+	glEnableVertexAttribArray(Basic::sp->a("vertex"));
+	glVertexAttribPointer(Basic::sp->a("vertex"), 4, GL_FLOAT, false, 0, Basic::vertices[cube]);
+
+	glEnableVertexAttribArray(Basic::sp->a("normal"));
+	glVertexAttribPointer(Basic::sp->a("normal"), 4, GL_FLOAT, false, 0, Basic::normals[cube]);
+
+	glDrawArrays(GL_TRIANGLES, 0, Basic::vertexCount[cube]);
+	glDisableVertexAttribArray(Basic::sp->a("vertex"));
+	glDisableVertexAttribArray(Basic::sp->a("normal"));
+}
+
 //Procedura rysująca zawartość sceny
 void drawScene(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod rysujący obraz******************l
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 	glm::mat4 V = glm::lookAt(camera->position, camera->position + camera->to_target_vector, glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 P = glm::perspective(glm::radians(50.0f), float(WIDTH/HEIGHT), 1.0f, 100.0f);
+	glm::mat4 P = glm::perspective(glm::radians(50.0f), float(WIDTH/HEIGHT), 1.0f, 200.0f);
 
 	// Kod rysujący
 	Basic::sp->use();
@@ -281,8 +300,31 @@ void drawScene(GLFWwindow* window) {
 
 	// Rysowanie modeli
 	for (int i = 0; i < NUM_OF_MODELS_TOTAL; i++) {
-		models[i]->draw();
+		models[i]->draw(); 
 	}
+
+	glm::mat4 t_matrix = models[TRUCK_ID]->getMMatrix();
+	glm::vec4 point_1 = t_matrix * glm::vec4(((Truck*)models[TRUCK_ID])->max_vert_x, 5.0f, ((Truck*)models[TRUCK_ID])->max_vert_z, 1.0f);
+	glm::vec4 point_2 = t_matrix * glm::vec4(((Truck*)models[TRUCK_ID])->min_vert_x, 5.0f, ((Truck*)models[TRUCK_ID])->max_vert_z, 1.0f);
+	glm::vec4 point_3 = t_matrix * glm::vec4(((Truck*)models[TRUCK_ID])->min_vert_x, 5.0f, ((Truck*)models[TRUCK_ID])->min_vert_z, 1.0f);
+	glm::vec4 point_4 = t_matrix * glm::vec4(((Truck*)models[TRUCK_ID])->max_vert_x, 5.0f, ((Truck*)models[TRUCK_ID])->min_vert_z, 1.0f);
+
+	drawPoint(point_1);
+	drawPoint(point_2);
+	drawPoint(point_3);
+	drawPoint(point_4);
+
+	t_matrix = models[0]->getMMatrix();
+	point_1 = t_matrix * glm::vec4(models[0]->max_vert_x, 5.0f, models[0]->max_vert_z, 1.0f);
+	point_2 = t_matrix * glm::vec4(models[0]->min_vert_x, 5.0f, models[0]->max_vert_z, 1.0f);
+	point_3 = t_matrix * glm::vec4(models[0]->min_vert_x, 5.0f, models[0]->min_vert_z, 1.0f);
+	point_4 = t_matrix * glm::vec4(models[0]->max_vert_x, 5.0f, models[0]->min_vert_z, 1.0f);
+
+
+	drawPoint(point_1);
+	drawPoint(point_2);
+	drawPoint(point_3);
+	drawPoint(point_4);
 
     //glDisable(GL_CULL_FACE);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -306,12 +348,6 @@ void sceneUpdate() {
 		((Truck*)models[TRUCK_ID])->acceleration = 0.0f;
 	}
 	camera->update(arrow_up, arrow_down, arrow_left, arrow_right);
-	for (int i = 0; i < NUM_OF_MODELS_TOTAL; i++) {
-		models[i]->updateRotation();
-		if (i != TRUCK_ID) {
-			((Truck*)models[TRUCK_ID])->collision(models[i]);
-		}
-	}
 	((Truck*)models[TRUCK_ID])->movement();
 	float angle_change = 0.0f;
 	if (A == true) {
@@ -321,6 +357,14 @@ void sceneUpdate() {
 		angle_change = 100.0f;
 	}
 	((Truck*)models[TRUCK_ID])->change_angle(angle_change * glfwGetTime());
+	((Truck*)models[TRUCK_ID])->collision(models[0]);
+	/*
+	for (int i = 0; i < NUM_OF_MODELS_TOTAL; i++) {
+		models[i]->updateRotation();
+		if (i != TRUCK_ID) {
+			((Truck*)models[TRUCK_ID])->collision(models[i]);
+		}
+	}*/
 }
 
 

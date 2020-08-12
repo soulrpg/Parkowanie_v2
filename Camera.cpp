@@ -24,7 +24,7 @@ void Camera::change_angle(int direction_horizontal, int direction_vertical) {
 		pitch_angle = 179.0f;
 	if (pitch_angle < -179.0f)
 		pitch_angle = -179.0f;
-	std::cout << "Pitch: " << pitch_angle << std::endl;
+	//std::cout << "Pitch: " << pitch_angle << std::endl;
 
 	float full_vector_length = glm::length(to_target_vector);
 	to_target_vector.y = full_vector_length * glm::cos(glm::radians(pitch_angle));
