@@ -1,5 +1,12 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (pl_szkielet_03_win.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Arrow.cpp
+  Basic.cpp
+  Camera.cpp
+  Sky.cpp
+  Truck.cpp
+  cube.cpp
   main_file.cpp
+C:\Users\Michal\Desktop\Parkowanie\Basic.cpp(77,42): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
 C:\Users\Michal\Desktop\Parkowanie\Models\jeep.h(14184,32): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\Michal\Desktop\Parkowanie\Models\jeep.h(28369,32): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\Michal\Desktop\Parkowanie\Models\jeep.h(42554,20): warning C4305: 'initializing': truncation from 'double' to 'float'
@@ -21,10 +28,18 @@ C:\Users\Michal\Desktop\Parkowanie\Models\arrownew.h(330,20): warning C4305: 'in
 C:\Users\Michal\Desktop\Parkowanie\Models\diamondnew.h(384,31): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\Michal\Desktop\Parkowanie\Models\diamondnew.h(769,27): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\Michal\Desktop\Parkowanie\Models\diamondnew.h(1154,19): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Michal\Desktop\Parkowanie\Models\goblet.h(28800,32): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Michal\Desktop\Parkowanie\Models\goblet.h(57601,29): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Michal\Desktop\Parkowanie\Models\goblet.h(86402,19): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\Michal\Desktop\Parkowanie\Models\wheel.h(684,32): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\Michal\Desktop\Parkowanie\Models\wheel.h(1369,29): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\Michal\Desktop\Parkowanie\Models\wheel.h(2054,16): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(192,74): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(192,45): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(435,56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(189,74): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(189,45): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  model.cpp
+  sphere.cpp
+  teapot.cpp
+  torus.cpp
+  Generating Code...
+C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(451,56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   pl_szkielet_03_win.vcxproj -> C:\Users\Michal\Desktop\Parkowanie\Debug\Parkowanie.exe

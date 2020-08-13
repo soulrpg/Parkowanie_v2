@@ -14,7 +14,7 @@
 
 namespace model_types {
 	enum Model_type {
-		jeep, slupek, lamp, truck, trailer, arrow, cube, wheel, diamond
+		jeep, slupek, lamp, truck, trailer, arrow, cube, wheel, diamond, goblet
 	};
 }
 using namespace model_types;
@@ -47,6 +47,8 @@ public:
 	Basic(Model_type model_type, glm::vec3 transform, glm::vec3 scale, std::string texture_name, float rotation_angle, glm::vec3 rotation, bool is_visible, bool is_rotating);
 	virtual void draw();
 	void translate(glm::vec3 pos);
+	void set_rotation(float angle);
+	void set_visibility(bool visible);
 	void applyScale();
 	static GLuint readTexture(char* filename);
 	void updateRotation();

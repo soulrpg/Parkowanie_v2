@@ -26,4 +26,5 @@ public:
 	Camera(glm::vec3 position, glm::vec3 target_position);
 	void change_angle(int direction_horizontal, int direction_vertical);
 	void update(bool arrow_up, bool arrow_down, bool arrow_left, bool arrow_right);
+	void set_final_position(float pitch, float yaw, glm::vec3 to_target_vec, glm::vec3 position);
 };

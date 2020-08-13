@@ -23,5 +23,7 @@ public:
 	bool collision(Basic* other);
 	void change_angle(float value);
 	void draw();
+	float get_speed();
+	void set_speed(float speed);
 };
 

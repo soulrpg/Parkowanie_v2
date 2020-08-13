@@ -74,7 +74,7 @@ void Basic::updateRotation() {
 	if (is_rotating) {
 		//angle_x += speed_x * glfwGetTime(); //Oblicz k¹t o jaki obiekt obróci³ siê podczas poprzedniej klatki
 		//angle_y += speed_y * glfwGetTime(); //Oblicz k¹t o jaki obiekt obróci³ siê podczas poprzedniej klatki
-		rotation_angle += 3.0f * glfwGetTime();
+		rotation_angle += 30.0f * glfwGetTime();
 	}
 }
 
@@ -107,4 +107,12 @@ glm::mat4 Basic::getMMatrix() {
 	M = glm::rotate(M, glm::radians(rotation_angle), rotation);
 	M = glm::scale(M, scale);
 	return M;
+}
+
+void Basic::set_rotation(float angle) {
+	this->rotation_angle = angle;
+}
+
+void Basic::set_visibility(bool visible) {
+	this->is_visible = visible;
 }

@@ -78,4 +78,15 @@ void Camera::change_angle(int direction_horizontal, int direction_vertical) {
 		if (arrow_right) {
 			position += moving_hor * this->speed * 20.0f * float(glfwGetTime());
 		}
+		//std::cout << "To target vector (x: " << to_target_vector.x << " y: " << to_target_vector.y << " z: " << to_target_vector.z << ")" << std::endl;
+
+		//std::cout << "Position (x: " << position.x << " y: " << position.y << " z: " << position.z << ")" << std::endl;
+
+}
+
+void Camera::set_final_position(float pitch, float yaw, glm::vec3 to_target_vec, glm::vec3 position) {
+	this->pitch_angle = pitch;
+	this->yaw_angle = yaw;
+	this->to_target_vector = to_target_vec;
+	this->position = position;
 }

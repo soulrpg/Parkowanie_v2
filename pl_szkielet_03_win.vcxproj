@@ -29,6 +29,7 @@
     <ClInclude Include="model.h" />
     <ClInclude Include="Models\arrownew.h" />
     <ClInclude Include="Models\diamondnew.h" />
+    <ClInclude Include="Models\goblet.h" />
     <ClInclude Include="Models\jeep.h" />
     <ClInclude Include="Models\lampnew.h" />
     <ClInclude Include="Models\slupek.h" />

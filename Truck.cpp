@@ -220,7 +220,7 @@ bool Truck::collision(Basic* other) {
 		point_in_triangle(o_point_4, t_point_1, t_point_2, t_point_3) ||
 		point_in_triangle(o_point_4, t_point_1, t_point_2, t_point_4))
 	{
-		std::cout << "Kolizja!" << std::endl;
+		//std::cout << "Kolizja!" << std::endl;
 		return true;
 	}
 	else {
@@ -236,4 +236,12 @@ void Truck::change_angle(float value) {
 		this->steer_angle = 50.0f;
 	if (this->steer_angle < -50.0f)
 		this->steer_angle = -50.0f;
+}
+
+float Truck::get_speed() {
+	return this->car_speed;
+}
+
+void Truck::set_speed(float speed) {
+	this->car_speed = speed;
 }

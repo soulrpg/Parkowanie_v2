@@ -39,6 +39,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "Models/trailernew.h"
 #include "Models/arrownew.h"
 #include "Models/diamondnew.h"
+#include "Models/goblet.h"
 #include "Camera.h"
 #include "Basic.h"
 #include "Arrow.h"
@@ -49,18 +50,27 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 
 
 // Ilosc modeli na scenie
-#define NUM_OF_MODELS_TOTAL 34
+#define NUM_OF_MODELS_TOTAL 50
 #define NUM_OF_BOXES 6
 
 // Miejsce w tablicy modeli, w ktorym znajduje sie ciezarowka (potrzebne do polimorfizmu)
 #define TRUCK_ID 1
 #define GROUND_ID 2
-#define TEST_ID 3
+#define ARROW_ID 46
+#define DIAMOND_1_ID 47
+#define DIAMOND_2_ID 48
+#define GOBLET_ID 49
 
 Camera* camera;
 
+// Stan gry - aktywuje sie gdy zmienia sie stan, aby zmienic polozenie paru obiektow
+bool state_changed = true;
+
+// 0 - Poczatek, 1 - Po pierwszym parkowaniu, 2 - Po drugim parkowaniu, 3 - Zwyciestwo 
+int game_state = 0;
+
 // Ilosc unikalnych modeli (typow)
-int Basic::num_of_unique_models = 9;
+int Basic::num_of_unique_models = 10;
 
 int* Basic::vertexCount = new int[num_of_unique_models];
 float** Basic::vertices = new float*[num_of_unique_models];
@@ -101,87 +111,74 @@ void key_callback(
 	int action,
 	int mod
 ) {
-	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-		std::cout << "W pressed!" << std::endl;
-		W = true;
-	}
-	if (key == GLFW_KEY_W && action == GLFW_RELEASE) {
-		std::cout << "W released!" << std::endl;
-		W = false;
-	}
-	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-		std::cout << "A pressed!" << std::endl;
-		A = true;
-	}
-	if (key == GLFW_KEY_A && action == GLFW_RELEASE) {
-		std::cout << "A released!" << std::endl;
-		A = false;
-	}
-	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-		std::cout << "S pressed!" << std::endl;
-		S = true;
-	}
-	if (key == GLFW_KEY_S && action == GLFW_RELEASE) {
-		std::cout << "S released!" << std::endl;
-		S = false;
-	} 
-	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-		std::cout << "D pressed!" << std::endl;
-		D = true;
-	}
-	if (key == GLFW_KEY_D && action == GLFW_RELEASE) {
-		std::cout << "D released!" << std::endl;
-		D = false;
+	if (game_state != 3) {
+		if (key == GLFW_KEY_W && action == GLFW_PRESS) {
+			std::cout << "W pressed!" << std::endl;
+			W = true;
+		}
+		if (key == GLFW_KEY_W && action == GLFW_RELEASE) {
+			std::cout << "W released!" << std::endl;
+			W = false;
+		}
+		if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+			std::cout << "A pressed!" << std::endl;
+			A = true;
+		}
+		if (key == GLFW_KEY_A && action == GLFW_RELEASE) {
+			std::cout << "A released!" << std::endl;
+			A = false;
+		}
+		if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+			std::cout << "S pressed!" << std::endl;
+			S = true;
+		}
+		if (key == GLFW_KEY_S && action == GLFW_RELEASE) {
+			std::cout << "S released!" << std::endl;
+			S = false;
+		}
+		if (key == GLFW_KEY_D && action == GLFW_PRESS) {
+			std::cout << "D pressed!" << std::endl;
+			D = true;
+		}
+		if (key == GLFW_KEY_D && action == GLFW_RELEASE) {
+			std::cout << "D released!" << std::endl;
+			D = false;
+		}
+		if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
+			std::cout << "UP pressed" << std::endl;
+			arrow_up = true;
+		}
+		if (key == GLFW_KEY_UP && action == GLFW_RELEASE) {
+			std::cout << "UP released!" << std::endl;
+			arrow_up = false;
+		}
+		if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
+			std::cout << "DOWN pressed" << std::endl;
+			arrow_down = true;
+		}
+		if (key == GLFW_KEY_DOWN && action == GLFW_RELEASE) {
+			std::cout << "DOWN released!" << std::endl;
+			arrow_down = false;
+		}
+		if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
+			std::cout << "LEFT pressed" << std::endl;
+			arrow_left = true;
+		}
+		if (key == GLFW_KEY_LEFT && action == GLFW_RELEASE) {
+			std::cout << "LEFT released!" << std::endl;
+			arrow_left = false;
+		}
+		if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
+			std::cout << "RIGHT pressed" << std::endl;
+			arrow_right = true;
+		}
+		if (key == GLFW_KEY_RIGHT && action == GLFW_RELEASE) {
+			std::cout << "RIGHT released!" << std::endl;
+			arrow_right = false;
+		}
 	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-	if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
-		std::cout << "UP pressed" << std::endl;
-		arrow_up = true;
-	}
-	if (key == GLFW_KEY_UP && action == GLFW_RELEASE) {
-		std::cout << "UP released!" << std::endl;
-		arrow_up = false;
-	}
-	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
-		std::cout << "DOWN pressed" << std::endl;
-		arrow_down = true;
-	}
-	if (key == GLFW_KEY_DOWN && action == GLFW_RELEASE) {
-		std::cout << "DOWN released!" << std::endl;
-		arrow_down = false;
-	}
-	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
-		std::cout << "LEFT pressed" << std::endl;
-		arrow_left = true;
-	}
-	if (key == GLFW_KEY_LEFT && action == GLFW_RELEASE) {
-		std::cout << "LEFT released!" << std::endl;
-		arrow_left = false;
-	}
-	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
-		std::cout << "RIGHT pressed" << std::endl;
-		arrow_right = true;
-	}
-	if (key == GLFW_KEY_RIGHT && action == GLFW_RELEASE) {
-		std::cout << "RIGHT released!" << std::endl;
-		arrow_right = false;
-	}
-	if (key == GLFW_KEY_I && action == GLFW_PRESS) {
-		models[TEST_ID]->translate(models[TEST_ID]->transform + glm::vec3(1.0f, 0.0f, 0.0f));
-	}
-	if (key == GLFW_KEY_K && action == GLFW_PRESS) {
-		models[TEST_ID]->translate(models[TEST_ID]->transform - glm::vec3(1.0f, 0.0f, 0.0f));
-	}
-	if (key == GLFW_KEY_J && action == GLFW_PRESS) {
-		models[TEST_ID]->translate(models[TEST_ID]->transform - glm::vec3(0.0f, 0.0f, 1.0f));
-	}
-	if (key == GLFW_KEY_L && action == GLFW_PRESS) {
-		models[TEST_ID]->translate(models[TEST_ID]->transform + glm::vec3(0.0f, 0.0f, 1.0f));
-	}
-	if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
-		std::cout << "Transform: x: " << models[TEST_ID]->transform.x << " z: " << models[TEST_ID]->transform.z << std::endl;
-	}
 }
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
@@ -220,6 +217,7 @@ void load_models() {
 	Basic::vertexCount[arrow] = arrownewVertexCount;
 	Basic::vertexCount[wheel] = wheelVertexCount;
 	Basic::vertexCount[diamond] = diamondnewVertexCount;
+	Basic::vertexCount[goblet] = gobletVertexCount;
 	Basic::vertexCount[cube] = Models::CubeInternal::vertexCount;
 
 	Basic::vertices[jeep] = jeepVertices;
@@ -230,6 +228,7 @@ void load_models() {
 	Basic::vertices[arrow] = arrownewVertices;
 	Basic::vertices[wheel] = wheelVertices;
 	Basic::vertices[diamond] = diamondnewVertices;
+	Basic::vertices[goblet] = gobletVertices;
 	Basic::vertices[cube] = Models::CubeInternal::vertices;
 
 	Basic::normals[jeep] = jeepNormals;
@@ -240,6 +239,7 @@ void load_models() {
 	Basic::normals[arrow] = arrownewNormals;
 	Basic::normals[wheel] = wheelNormals;
 	Basic::normals[diamond] = diamondnewNormals;
+	Basic::normals[goblet] = gobletNormals;
 	Basic::normals[cube] = Models::CubeInternal::normals;
 
 	Basic::texCoords[jeep] = jeepTexCoords;
@@ -250,6 +250,7 @@ void load_models() {
 	Basic::texCoords[arrow] = arrownewTexCoords; 
 	Basic::texCoords[wheel] = wheelTexCoords; 
 	Basic::texCoords[diamond] = diamondnewTexCoords; 
+	Basic::texCoords[goblet] = gobletTexCoords; 
 	Basic::texCoords[cube] = Models::CubeInternal::texCoords;
 }
 
@@ -263,43 +264,58 @@ void initOpenGLProgram(GLFWwindow* window) {
 	camera = new Camera(glm::vec3(0.0f, 1.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f)); // Tworzy obiekt kamery
 
 	// Inicjalizuje modele na scenie
-	models[0] = new Basic(jeep, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "jeep", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[1] = new Truck(truck, glm::vec3(15.0f, 0.0f, 0.0f), glm::vec3(0.09f, 0.09f, 0.09f), "trucknew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f),
+	models[0] = new Basic(jeep, glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "jeep", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[1] = new Truck(truck, glm::vec3(15.0f, -0.3f, 0.0f), glm::vec3(0.09f, 0.09f, 0.09f), "trucknew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f),
 		true, false, glm::vec3(1.45f, 0.9f, 3.2f), glm::vec3(-0.85f, 0.9f, 3.2f));
 	models[2] = new Basic(cube, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(75.0f, 0.05f, 75.0f), "podloze", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[3] = new Basic(lamp, glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[4] = new Basic(cube, glm::vec3(19.0f, 1.0f, 12.0f), glm::vec3(9.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[5] = new Basic(cube, glm::vec3(19.0f, 1.0f, -17.0f), glm::vec3(9.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[6] = new Basic(cube, glm::vec3(-17.0f, 1.0f, 19.0f), glm::vec3(11.8f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[7] = new Basic(cube, glm::vec3(-36.0f, 1.0f, -10.0f), glm::vec3(8.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[8] = new Basic(cube, glm::vec3(-28.0f, 1.0f, 4.3f), glm::vec3(1.0f, 0.5f, 13.5f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[9] = new Basic(cube, glm::vec3(28.0f, 1.0f, -3.0f), glm::vec3(1.0f, 0.5f, 14.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[10] = new Basic(cube, glm::vec3(16.0f, 1.0f, 41.0f), glm::vec3(22.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[11] = new Basic(cube, glm::vec3(33.0f, 1.0f, 25.0f), glm::vec3(22.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[12] = new Basic(cube, glm::vec3(0.0f, 1.0f, -39.0f), glm::vec3(26.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[13] = new Basic(cube, glm::vec3(32.0f, 1.0f, -23.0f), glm::vec3(22.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[14] = new Basic(cube, glm::vec3(-35.0f, 1.0f, -53.0f), glm::vec3(9.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[15] = new Basic(cube, glm::vec3(48.0f, 1.0f, 66.0f), glm::vec3(9.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[16] = new Basic(cube, glm::vec3(41.0f, 1.0f, -61.0f), glm::vec3(16.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[17] = new Basic(cube, glm::vec3(61.0f, 1.0f, -32.0f), glm::vec3(6.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[18] = new Basic(cube, glm::vec3(61.0f, 1.0f, -50.0f), glm::vec3(6.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[19] = new Basic(cube, glm::vec3(10.0f, 1.0f,  19.1f), glm::vec3(1.0f, 0.5f, 6.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[20] = new Basic(cube, glm::vec3(-6.0f, 1.0f, 30.0f), glm::vec3(1.0f, 0.5f, 10.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[21] = new Basic(cube, glm::vec3(-43.0f, 1.0f, -31.3f), glm::vec3(1.0f, 0.5f, 20.5f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[22] = new Basic(cube, glm::vec3(-25.0f, 1.0f, -47.0f), glm::vec3(1.0f, 0.5f, 7.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[23] = new Basic(cube, glm::vec3(38.0f, 1.0f, 54.0f), glm::vec3(1.0f, 0.5f, 12.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[24] = new Basic(cube, glm::vec3(56.0f, 1.0f, 45.0f), glm::vec3(1.0f, 0.5f, 20.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[25] = new Basic(cube, glm::vec3(11.0f, 1.0f, -20.0f), glm::vec3(1.0f, 0.5f, 2.2f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[26] = new Basic(cube, glm::vec3(26.0f, 1.0f, -50.0f), glm::vec3(1.0f, 0.5f, 10.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[27] = new Basic(cube, glm::vec3(55.0f, 1.0f, -27.0f), glm::vec3(1.0f, 0.5f, 4.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[28] = new Basic(cube, glm::vec3(68.0f, 1.0f, -41.0f), glm::vec3(1.0f, 0.5f, 10.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[29] = new Basic(cube, glm::vec3(56.0f, 1.0f, -55.5f), glm::vec3(1.0f, 0.5f, 4.5f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[30] = new Basic(lamp, glm::vec3(-27.0f, 1.0f, -42.0f), glm::vec3(2.0f, 2.0f, 2.0f), "lampnew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[31] = new Basic(lamp, glm::vec3(54.0f, 1.0f, -50.0f), glm::vec3(2.0f, 2.0f, 2.0f), "lampnew", 90.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[32] = new Basic(lamp, glm::vec3(54.0f, 1.0f, 45.0f), glm::vec3(2.0f, 2.0f, 2.0f), "lampnew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[33] = new Basic(lamp, glm::vec3(26.0f, 1.0f, -2.0f), glm::vec3(2.0f, 2.0f, 2.0f), "lampnew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	
-	
+	models[3] = new Basic(diamond, glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), "diamond", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[4] = new Basic(cube, glm::vec3(19.0f, 0.5f, 12.0f), glm::vec3(9.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[5] = new Basic(cube, glm::vec3(19.0f, 0.5f, -17.0f), glm::vec3(9.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[6] = new Basic(cube, glm::vec3(-17.0f, 0.5f, 19.0f), glm::vec3(11.8f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[7] = new Basic(cube, glm::vec3(-36.0f, 0.5f, -10.0f), glm::vec3(8.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[8] = new Basic(cube, glm::vec3(-28.0f, 0.5f, 4.3f), glm::vec3(1.0f, 0.5f, 13.5f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[9] = new Basic(cube, glm::vec3(28.0f, 0.5f, -3.0f), glm::vec3(1.0f, 0.5f, 14.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[10] = new Basic(cube, glm::vec3(16.0f, 0.5f, 41.0f), glm::vec3(22.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[11] = new Basic(cube, glm::vec3(33.0f, 0.5f, 25.0f), glm::vec3(22.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[12] = new Basic(cube, glm::vec3(0.0f, 0.5f, -39.0f), glm::vec3(26.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[13] = new Basic(cube, glm::vec3(32.0f, 0.5f, -23.0f), glm::vec3(22.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[14] = new Basic(cube, glm::vec3(-35.0f, 0.5f, -53.0f), glm::vec3(9.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[15] = new Basic(cube, glm::vec3(48.0f, 0.5f, 66.0f), glm::vec3(9.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[16] = new Basic(cube, glm::vec3(41.0f, 0.5f, -61.0f), glm::vec3(16.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[17] = new Basic(cube, glm::vec3(61.0f, 0.5f, -32.0f), glm::vec3(6.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[18] = new Basic(cube, glm::vec3(61.0f, 0.5f, -50.0f), glm::vec3(6.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[19] = new Basic(cube, glm::vec3(10.0f, 0.5f,  19.1f), glm::vec3(1.0f, 0.5f, 6.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[20] = new Basic(cube, glm::vec3(-6.0f, 0.5f, 30.0f), glm::vec3(1.0f, 0.5f, 10.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[21] = new Basic(cube, glm::vec3(-43.0f, 0.5f, -31.3f), glm::vec3(1.0f, 0.5f, 20.5f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[22] = new Basic(cube, glm::vec3(-25.0f, 0.5f, -47.0f), glm::vec3(1.0f, 0.5f, 7.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[23] = new Basic(cube, glm::vec3(38.0f, 0.5f, 54.0f), glm::vec3(1.0f, 0.5f, 12.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[24] = new Basic(cube, glm::vec3(56.0f, 0.5f, 45.0f), glm::vec3(1.0f, 0.5f, 20.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[25] = new Basic(cube, glm::vec3(11.0f, 0.5f, -20.0f), glm::vec3(1.0f, 0.5f, 2.2f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[26] = new Basic(cube, glm::vec3(26.0f, 0.5f, -50.0f), glm::vec3(1.0f, 0.5f, 10.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[27] = new Basic(cube, glm::vec3(55.0f, 0.5f, -27.0f), glm::vec3(1.0f, 0.5f, 4.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[28] = new Basic(cube, glm::vec3(68.0f, 0.5f, -41.0f), glm::vec3(1.0f, 0.5f, 10.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[29] = new Basic(cube, glm::vec3(56.0f, 0.5f, -55.5f), glm::vec3(1.0f, 0.5f, 4.5f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[30] = new Basic(lamp, glm::vec3(-27.0f, 0.1f, -42.0f), glm::vec3(2.0f, 2.0f, 2.0f), "lampnew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[31] = new Basic(lamp, glm::vec3(54.0f, 0.1f, -50.0f), glm::vec3(2.0f, 2.0f, 2.0f), "lampnew", 90.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[32] = new Basic(lamp, glm::vec3(54.0f, 0.1f, 45.0f), glm::vec3(2.0f, 2.0f, 2.0f), "lampnew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[33] = new Basic(lamp, glm::vec3(26.0f, 0.1f, -2.0f), glm::vec3(2.0f, 2.0f, 2.0f), "lampnew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[34] = new Basic(jeep, glm::vec3(-40.0f, 0.1f, -44.0f), glm::vec3(1.0f, 1.0f, 1.0f), "jeep", 180.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[35] = new Basic(jeep, glm::vec3(30.0f, 0.1f, -56.0f), glm::vec3(1.0f, 1.0f, 1.0f), "jeep", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[36] = new Basic(jeep, glm::vec3(60.0f, 0.1f, -41.0f), glm::vec3(1.0f, 1.0f, 1.0f), "jeep", 90.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[37] = new Basic(jeep, glm::vec3(52.0f, 0.1f, 57.0f), glm::vec3(1.0f, 1.0f, 1.0f), "jeep", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[38] = new Basic(trailer, glm::vec3(46.0f, 0.1f, 58.0f), glm::vec3(0.8f, 0.8f, 0.8f), "trailernew", 180.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[39] = new Basic(trailer, glm::vec3(5.0f, 0.1f, 0.0f), glm::vec3(0.8f, 0.8f, 0.8f), "trailernew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[40] = new Basic(slupek, glm::vec3(29.0f, 1.4f, 32.0f), glm::vec3(0.2f, 0.2f, 0.2f), "slupeknew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, true);
+	models[41] = new Basic(slupek, glm::vec3(-25.0f, 1.4f, -32.0f), glm::vec3(0.2f, 0.2f, 0.2f), "slupeknew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, true);
+	models[42] = new Basic(slupek, glm::vec3(-5.0f, 1.4f, -31.0f), glm::vec3(0.2f, 0.2f, 0.2f), "slupeknew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, true);
+	models[43] = new Basic(slupek, glm::vec3(4.0f, 1.4f, -20.0f), glm::vec3(0.2f, 0.2f, 0.2f), "slupeknew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, true);
+	models[44] = new Basic(slupek, glm::vec3(-26.0f, 1.4f, -16.0f), glm::vec3(0.2f, 0.2f, 0.2f), "slupeknew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, true);
+	models[45] = new Basic(slupek, glm::vec3(40.0f, 1.4f, -40.0f), glm::vec3(0.2f, 0.2f, 0.2f), "slupeknew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, true);
+	models[46] = new Arrow(arrow, glm::vec3(-35.0f, 6.0f, -45.0f), glm::vec3(1.5f, 1.5f, 1.5f), "arrownew", -90.0f, glm::vec3(1.0f, 0.0f, 0.0f), true, false);
+	models[47] = new Basic(diamond, glm::vec3(-35.0f, 0.1f, -42.0f), glm::vec3(0.004f, 0.004f, 0.004f), "diamond", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, true);
+	models[48] = new Basic(diamond, glm::vec3(-35.0f, 0.1f, -49.0f), glm::vec3(0.004f, 0.004f, 0.004f), "diamond", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, true);
+	models[49] = new Basic(goblet, glm::vec3(38.0f, 1.5f, 60.0f), glm::vec3(0.4f, 0.4f, 0.4f), "goblet", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), false, true);
+
 	boxes[0] = new Sky(cube, glm::vec3(500.0f, 0.0f, 0.0f), glm::vec3(0.1f, 502.0f, 502.0f), "skybox_left", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	boxes[1] = new Sky(cube, glm::vec3(-500.0f, 0.0f, 0.0f), glm::vec3(0.1f, 502.0f, 502.0f), "skybox_right", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	boxes[2] = new Sky(cube, glm::vec3(0.0f, 0.0f, 500.0f), glm::vec3(502.0f, 502.0f, 0.1f), "skybox_back", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
@@ -389,13 +405,13 @@ void drawScene(GLFWwindow* window) {
 	drawPoint(point_3);
 	drawPoint(point_4);
 
-	t_matrix = models[0]->getMMatrix();
-	point_1 = t_matrix * glm::vec4(models[0]->max_vert_x, 5.0f, models[0]->max_vert_z, 1.0f);
-	point_2 = t_matrix * glm::vec4(models[0]->min_vert_x, 5.0f, models[0]->max_vert_z, 1.0f);
-	point_3 = t_matrix * glm::vec4(models[0]->min_vert_x, 5.0f, models[0]->min_vert_z, 1.0f);
-	point_4 = t_matrix * glm::vec4(models[0]->max_vert_x, 5.0f, models[0]->min_vert_z, 1.0f);
+	t_matrix = models[DIAMOND_1_ID]->getMMatrix();
+	point_1 = t_matrix * glm::vec4(models[DIAMOND_1_ID]->max_vert_x, 5.0f, models[DIAMOND_1_ID]->max_vert_z, 1.0f);
+	point_2 = t_matrix * glm::vec4(models[DIAMOND_1_ID]->min_vert_x, 5.0f, models[DIAMOND_1_ID]->max_vert_z, 1.0f);
+	point_3 = t_matrix * glm::vec4(models[DIAMOND_1_ID]->min_vert_x, 5.0f, models[DIAMOND_1_ID]->min_vert_z, 1.0f);
+	point_4 = t_matrix * glm::vec4(models[DIAMOND_1_ID]->max_vert_x, 5.0f, models[DIAMOND_1_ID]->min_vert_z, 1.0f);
 
-
+	
 	drawPoint(point_1);
 	drawPoint(point_2);
 	drawPoint(point_3);
@@ -435,8 +451,49 @@ void sceneUpdate() {
 	((Truck*)models[TRUCK_ID])->change_angle(angle_change * glfwGetTime());
 	for (int i = 0; i < NUM_OF_MODELS_TOTAL; i++) {
 		models[i]->updateRotation();
-		if (i != TRUCK_ID && i!= GROUND_ID) {
-			((Truck*)models[TRUCK_ID])->collision(models[i]);
+		if (i != TRUCK_ID && i!= GROUND_ID && i!= ARROW_ID && i!= DIAMOND_1_ID && i!= DIAMOND_2_ID) {
+			if (((Truck*)models[TRUCK_ID])->collision(models[i])) {
+				state_changed = true;
+				std::cout << "Kolizja!" << std::endl;
+				game_state = 0;
+			}
+		}
+	}
+	if (((Truck*)models[TRUCK_ID])->collision(models[DIAMOND_1_ID]) && ((Truck*)models[TRUCK_ID])->collision(models[DIAMOND_2_ID]) &&
+		((Truck*)models[TRUCK_ID])->get_speed() == 0.0f) {
+		game_state += 1;
+		std::cout << "Nastepny stan!" << std::endl;
+		state_changed = true;
+	}
+	if (state_changed) {
+		state_changed = false;
+		if (game_state == 0) {
+			models[TRUCK_ID]->translate(glm::vec3(15.0f, -0.3f, 0.0f));
+			models[TRUCK_ID]->set_rotation(0.0f);
+			models[ARROW_ID]->translate(glm::vec3(-35.0f, 6.0f, -45.0f));
+			models[DIAMOND_1_ID]->translate(glm::vec3(-35.0f, 0.1f, -42.0f));
+			models[DIAMOND_2_ID]->translate(glm::vec3(-35.0f, 0.1f, -49.0f));
+			((Truck*)models[TRUCK_ID])->set_speed(0.0f);
+			((Truck*)models[TRUCK_ID])->acceleration = 0.0f;
+			std::cout << "RESET!" << std::endl;
+		}
+		else if (game_state == 1) {
+			models[ARROW_ID]->translate(glm::vec3(60.0f, 6.0f, -46.0f));
+			models[DIAMOND_1_ID]->translate(glm::vec3(57.0f, 0.1f, -46.0f));
+			models[DIAMOND_2_ID]->translate(glm::vec3(64.0f, 0.1f, -46.0f));
+		}
+		else if (game_state == 2) {
+			models[ARROW_ID]->translate(glm::vec3(42.0f, 6.0f, 58.0f));
+			models[DIAMOND_1_ID]->translate(glm::vec3(41.5f, 0.1f, 55.0f));
+			models[DIAMOND_2_ID]->translate(glm::vec3(41.5f, 0.1f, 62.0f));
+		}
+		else {
+			camera->set_final_position(96.1997f, 142.2f, glm::vec3(6.61f, -1.08f, -7.94f), glm::vec3(35.14f, 4.49f, 68.25f));
+			models[ARROW_ID]->set_visibility(false);
+			models[DIAMOND_1_ID]->set_visibility(false);
+			models[DIAMOND_2_ID]->set_visibility(false);
+			models[GOBLET_ID]->set_visibility(true);
+			std::cout << "YOU WON!" << std::endl;
 		}
 	}
 }
