@@ -51,7 +51,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 
 // Ilosc modeli na scenie
 #define NUM_OF_MODELS_TOTAL 50
-#define NUM_OF_BOXES 6
+#define NUM_OF_BOXES 10
 
 // Miejsce w tablicy modeli, w ktorym znajduje sie ciezarowka (potrzebne do polimorfizmu)
 #define TRUCK_ID 1
@@ -88,7 +88,7 @@ bool arrow_left = false;
 bool arrow_right = false;
 
 Basic* models[NUM_OF_MODELS_TOTAL];
-Sky* boxes[6];
+Sky* boxes[NUM_OF_BOXES];
 
 ShaderProgram* Basic::sp;
 
@@ -315,6 +315,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	models[47] = new Basic(diamond, glm::vec3(-35.0f, 0.1f, -42.0f), glm::vec3(0.004f, 0.004f, 0.004f), "diamond", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, true);
 	models[48] = new Basic(diamond, glm::vec3(-35.0f, 0.1f, -49.0f), glm::vec3(0.004f, 0.004f, 0.004f), "diamond", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, true);
 	models[49] = new Basic(goblet, glm::vec3(38.0f, 1.5f, 60.0f), glm::vec3(0.4f, 0.4f, 0.4f), "goblet", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), false, true);
+	
 
 	boxes[0] = new Sky(cube, glm::vec3(500.0f, 0.0f, 0.0f), glm::vec3(0.1f, 502.0f, 502.0f), "skybox_left", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	boxes[1] = new Sky(cube, glm::vec3(-500.0f, 0.0f, 0.0f), glm::vec3(0.1f, 502.0f, 502.0f), "skybox_right", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
@@ -322,6 +323,11 @@ void initOpenGLProgram(GLFWwindow* window) {
 	boxes[3] = new Sky(cube, glm::vec3(0.0f, 0.0f, -500.0f), glm::vec3(502.0f, 502.0f, 0.1f), "skybox_middle", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	boxes[4] = new Sky(cube, glm::vec3(0.0f, 500.0f, 0.0f), glm::vec3(502.0f, 0.1f, 502.1f), "skybox_top", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	boxes[5] = new Sky(cube, glm::vec3(0.0f, -500.0f, 0.0f), glm::vec3(502.0f, 0.1f, 502.1f), "skybox_bottom", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	
+	boxes[6] = new Sky(cube, glm::vec3(75.0f, 0.0f, 0.0f), glm::vec3(0.4f, 10.0f, 75.0f), "wall", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	boxes[7] = new Sky(cube, glm::vec3(-75.0f, 0.0f, 0.0f), glm::vec3(0.4f, 10.0f, 75.0f), "wall", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	boxes[8] = new Sky(cube, glm::vec3(0.0f, 0.0f, 75.0f), glm::vec3(75.0f, 10.0f, 0.4f), "wall", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	boxes[9] = new Sky(cube, glm::vec3(0.0f, 0.0f, -75.0f), glm::vec3(75.0f, 10.0f, 0.4f), "wall", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	// Koniec inicjalizacji modeli (ilość modeli w NUM_OF_MODELS_TOTAL
 	
 	glClearColor(1.0f, 1.0f, 0, 1); //Ustaw kolor czyszczenia bufora kolorów

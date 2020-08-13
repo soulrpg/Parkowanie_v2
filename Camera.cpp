@@ -60,7 +60,7 @@ void Camera::change_angle(int direction_horizontal, int direction_vertical) {
 			//std::cout << "To Target vector (x: " << to_target_vector.x << " y: " <<  to_target_vector.y << " z: " << to_target_vector.z << ")" << std::endl;
 			//std::cout << "Position (x: " << position.x << " y: " << position.y << " z: " << position.z << ")" << std::endl;
 			//std::cout << "Moving dir (x: " << moving_dir.x << " y: " << moving_dir.y << " z: " << moving_dir.z << ")" << std::endl;
-			position += moving_dir * float(glfwGetTime()) * 20.0f;
+			position += moving_dir * float(glfwGetTime()) * 30.0f;
 			//to_target_vector += moving_dir;
 
 		}
