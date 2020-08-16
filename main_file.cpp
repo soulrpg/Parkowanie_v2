@@ -209,6 +209,7 @@ void mouse_button_callback(GLFWwindow * window, int button, int action, int mods
 }
 
 void load_models() {
+	std::cout << "Loading models..." << std::endl;
 	Basic::vertexCount[jeep] = jeepVertexCount;
 	Basic::vertexCount[slupek] = slupeknewVertexCount;
 	Basic::vertexCount[lamp] = lampnewVertexCount;
@@ -252,6 +253,7 @@ void load_models() {
 	Basic::texCoords[diamond] = diamondnewTexCoords; 
 	Basic::texCoords[goblet] = gobletTexCoords; 
 	Basic::texCoords[cube] = Models::CubeInternal::texCoords;
+	std::cout << "Models loaded." << std::endl;
 }
 
 //Procedura inicjująca
@@ -268,7 +270,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	models[1] = new Truck(truck, glm::vec3(15.0f, -0.3f, 0.0f), glm::vec3(0.09f, 0.09f, 0.09f), "trucknew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f),
 		true, false, glm::vec3(1.45f, 0.9f, 3.2f), glm::vec3(-0.85f, 0.9f, 3.2f));
 	models[2] = new Basic(cube, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(75.0f, 0.05f, 75.0f), "podloze", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[3] = new Basic(diamond, glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), "diamond", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[3] = new Basic(diamond, glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), "diamond", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), false, false);
 	models[4] = new Basic(cube, glm::vec3(19.0f, 0.5f, 12.0f), glm::vec3(9.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	models[5] = new Basic(cube, glm::vec3(19.0f, 0.5f, -17.0f), glm::vec3(9.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	models[6] = new Basic(cube, glm::vec3(-17.0f, 0.5f, 19.0f), glm::vec3(11.8f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
@@ -315,7 +317,6 @@ void initOpenGLProgram(GLFWwindow* window) {
 	models[47] = new Basic(diamond, glm::vec3(-35.0f, 0.1f, -42.0f), glm::vec3(0.004f, 0.004f, 0.004f), "diamond", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, true);
 	models[48] = new Basic(diamond, glm::vec3(-35.0f, 0.1f, -49.0f), glm::vec3(0.004f, 0.004f, 0.004f), "diamond", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, true);
 	models[49] = new Basic(goblet, glm::vec3(38.0f, 1.5f, 60.0f), glm::vec3(0.4f, 0.4f, 0.4f), "goblet", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), false, true);
-	
 
 	boxes[0] = new Sky(cube, glm::vec3(500.0f, 0.0f, 0.0f), glm::vec3(0.1f, 502.0f, 502.0f), "skybox_left", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	boxes[1] = new Sky(cube, glm::vec3(-500.0f, 0.0f, 0.0f), glm::vec3(0.1f, 502.0f, 502.0f), "skybox_right", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
@@ -399,7 +400,7 @@ void drawScene(GLFWwindow* window) {
 		boxes[i]->draw();
 	}
 
-	/*
+	
 	glm::mat4 t_matrix = models[TRUCK_ID]->getMMatrix();
 	glm::vec4 point_1 = t_matrix * glm::vec4(((Truck*)models[TRUCK_ID])->max_vert_x, 5.0f, ((Truck*)models[TRUCK_ID])->max_vert_z, 1.0f);
 	glm::vec4 point_2 = t_matrix * glm::vec4(((Truck*)models[TRUCK_ID])->min_vert_x, 5.0f, ((Truck*)models[TRUCK_ID])->max_vert_z, 1.0f);
@@ -411,18 +412,18 @@ void drawScene(GLFWwindow* window) {
 	drawPoint(point_3);
 	drawPoint(point_4);
 
-	t_matrix = models[DIAMOND_1_ID]->getMMatrix();
-	point_1 = t_matrix * glm::vec4(models[DIAMOND_1_ID]->max_vert_x, 5.0f, models[DIAMOND_1_ID]->max_vert_z, 1.0f);
-	point_2 = t_matrix * glm::vec4(models[DIAMOND_1_ID]->min_vert_x, 5.0f, models[DIAMOND_1_ID]->max_vert_z, 1.0f);
-	point_3 = t_matrix * glm::vec4(models[DIAMOND_1_ID]->min_vert_x, 5.0f, models[DIAMOND_1_ID]->min_vert_z, 1.0f);
-	point_4 = t_matrix * glm::vec4(models[DIAMOND_1_ID]->max_vert_x, 5.0f, models[DIAMOND_1_ID]->min_vert_z, 1.0f);
+	t_matrix = models[0]->getMMatrix();
+	point_1 = t_matrix * glm::vec4(models[0]->max_vert_x, 5.0f, models[0]->max_vert_z, 1.0f);
+	point_2 = t_matrix * glm::vec4(models[0]->min_vert_x, 5.0f, models[0]->max_vert_z, 1.0f);
+	point_3 = t_matrix * glm::vec4(models[0]->min_vert_x, 5.0f, models[0]->min_vert_z, 1.0f);
+	point_4 = t_matrix * glm::vec4(models[0]->max_vert_x, 5.0f, models[0]->min_vert_z, 1.0f);
 
 	
 	drawPoint(point_1);
 	drawPoint(point_2);
 	drawPoint(point_3);
 	drawPoint(point_4);
-	*/
+	
 
     //glDisable(GL_CULL_FACE);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -461,6 +462,7 @@ void sceneUpdate() {
 			if (((Truck*)models[TRUCK_ID])->collision(models[i])) {
 				state_changed = true;
 				std::cout << "Kolizja!" << std::endl;
+				std::cout << i << std::endl;
 				game_state = 0;
 			}
 		}
