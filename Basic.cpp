@@ -79,9 +79,12 @@ void Basic::updateRotation() {
 }
 
 void Basic::setCorners() {
-	float min_x, max_x, min_z, max_z;
+	float min_x = 0;
+	float max_x = 0;
+	float max_z = 0;
+	float min_z = 0;
 	bool first = true;
-	for (int i = 0; i <= vertexCount[this->model_type] * 4; i+=4){
+	for (int i = 0; i < vertexCount[this->model_type] * 4; i+=4){
 		if (first) {
 			min_x = vertices[this->model_type][i];
 			max_x = vertices[this->model_type][i];
@@ -98,7 +101,6 @@ void Basic::setCorners() {
 	this->min_vert_x = min_x;
 	this->max_vert_z = max_z;
 	this->min_vert_z = min_z;
-	//std::cout << "Max x: " << max_x << " min x: " << min_x << " max z: " << max_z << " min z: " << min_z << std::endl;
 }
 
 glm::mat4 Basic::getMMatrix() {

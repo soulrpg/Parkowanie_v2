@@ -270,7 +270,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	models[1] = new Truck(truck, glm::vec3(15.0f, -0.3f, 0.0f), glm::vec3(0.09f, 0.09f, 0.09f), "trucknew", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f),
 		true, false, glm::vec3(1.45f, 0.9f, 3.2f), glm::vec3(-0.85f, 0.9f, 3.2f));
 	models[2] = new Basic(cube, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(75.0f, 0.05f, 75.0f), "podloze", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
-	models[3] = new Basic(diamond, glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), "diamond", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), false, false);
+	models[3] = new Basic(jeep, glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "jeep", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	models[4] = new Basic(cube, glm::vec3(19.0f, 0.5f, 12.0f), glm::vec3(9.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	models[5] = new Basic(cube, glm::vec3(19.0f, 0.5f, -17.0f), glm::vec3(9.0f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	models[6] = new Basic(cube, glm::vec3(-17.0f, 0.5f, 19.0f), glm::vec3(11.8f, 0.5f, 1.0f), "curb", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
@@ -400,7 +400,7 @@ void drawScene(GLFWwindow* window) {
 		boxes[i]->draw();
 	}
 
-	
+	/*
 	glm::mat4 t_matrix = models[TRUCK_ID]->getMMatrix();
 	glm::vec4 point_1 = t_matrix * glm::vec4(((Truck*)models[TRUCK_ID])->max_vert_x, 5.0f, ((Truck*)models[TRUCK_ID])->max_vert_z, 1.0f);
 	glm::vec4 point_2 = t_matrix * glm::vec4(((Truck*)models[TRUCK_ID])->min_vert_x, 5.0f, ((Truck*)models[TRUCK_ID])->max_vert_z, 1.0f);
@@ -413,17 +413,17 @@ void drawScene(GLFWwindow* window) {
 	drawPoint(point_4);
 
 	t_matrix = models[0]->getMMatrix();
-	point_1 = t_matrix * glm::vec4(models[0]->max_vert_x, 5.0f, models[0]->max_vert_z, 1.0f);
-	point_2 = t_matrix * glm::vec4(models[0]->min_vert_x, 5.0f, models[0]->max_vert_z, 1.0f);
-	point_3 = t_matrix * glm::vec4(models[0]->min_vert_x, 5.0f, models[0]->min_vert_z, 1.0f);
-	point_4 = t_matrix * glm::vec4(models[0]->max_vert_x, 5.0f, models[0]->min_vert_z, 1.0f);
+	point_1 = t_matrix * glm::vec4(models[34]->max_vert_x, 5.0f, models[0]->max_vert_z, 1.0f);
+	point_2 = t_matrix * glm::vec4(models[34]->min_vert_x, 5.0f, models[0]->max_vert_z, 1.0f);
+	point_3 = t_matrix * glm::vec4(models[34]->min_vert_x, 5.0f, models[0]->min_vert_z, 1.0f);
+	point_4 = t_matrix * glm::vec4(models[34]->max_vert_x, 5.0f, models[0]->min_vert_z, 1.0f);
 
 	
 	drawPoint(point_1);
 	drawPoint(point_2);
 	drawPoint(point_3);
 	drawPoint(point_4);
-	
+	*/
 
     //glDisable(GL_CULL_FACE);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
