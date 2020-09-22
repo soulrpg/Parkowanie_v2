@@ -14,7 +14,7 @@
 
 namespace model_types {
 	enum Model_type {
-		jeep, slupek, lamp, truck, trailer, arrow, cube, wheel, diamond, goblet
+		jeep, slupek, lamp, truck, trailer, arrow, cube, wheel, diamond, goblet, leaves, stem
 	};
 }
 using namespace model_types;

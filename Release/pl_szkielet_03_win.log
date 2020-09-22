@@ -23,15 +23,21 @@ C:\Users\Michal\Desktop\Parkowanie\Models\diamondnew.h(1154,19): warning C4305: 
 C:\Users\Michal\Desktop\Parkowanie\Models\goblet.h(28800,32): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\Michal\Desktop\Parkowanie\Models\goblet.h(57601,29): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\Michal\Desktop\Parkowanie\Models\goblet.h(86402,19): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Michal\Desktop\Parkowanie\Models\MapleTreeLeaves.h(11130,31): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Michal\Desktop\Parkowanie\Models\MapleTreeLeaves.h(22261,28): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Michal\Desktop\Parkowanie\Models\MapleTreeLeaves.h(33392,15): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Michal\Desktop\Parkowanie\Models\MapleTreeStem.h(113040,33): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Michal\Desktop\Parkowanie\Models\MapleTreeStem.h(226081,23): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Michal\Desktop\Parkowanie\Models\MapleTreeStem.h(339122,18): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\Michal\Desktop\Parkowanie\Models\wheel.h(684,32): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\Michal\Desktop\Parkowanie\Models\wheel.h(1369,29): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\Michal\Desktop\Parkowanie\Models\wheel.h(2054,16): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(189,74): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(189,45): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(458,56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(191,74): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(191,45): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Michal\Desktop\Parkowanie\main_file.cpp(478,56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   Generating code
-  0 of 573 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  1 of 573 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    3 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   pl_szkielet_03_win.vcxproj -> C:\Users\Michal\Desktop\Parkowanie\Release\Parkowanie.exe

@@ -40,6 +40,8 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "Models/arrownew.h"
 #include "Models/diamondnew.h"
 #include "Models/goblet.h"
+#include "Models/MapleTreeLeaves.h"
+#include "Models/MapleTreeStem.h"
 #include "Camera.h"
 #include "Basic.h"
 #include "Arrow.h"
@@ -50,7 +52,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 
 
 // Ilosc modeli na scenie
-#define NUM_OF_MODELS_TOTAL 50
+#define NUM_OF_MODELS_TOTAL 60
 #define NUM_OF_BOXES 10
 
 // Miejsce w tablicy modeli, w ktorym znajduje sie ciezarowka (potrzebne do polimorfizmu)
@@ -70,7 +72,7 @@ bool state_changed = true;
 int game_state = 0;
 
 // Ilosc unikalnych modeli (typow)
-int Basic::num_of_unique_models = 10;
+int Basic::num_of_unique_models = 12;
 
 int* Basic::vertexCount = new int[num_of_unique_models];
 float** Basic::vertices = new float*[num_of_unique_models];
@@ -220,6 +222,8 @@ void load_models() {
 	Basic::vertexCount[diamond] = diamondnewVertexCount;
 	Basic::vertexCount[goblet] = gobletVertexCount;
 	Basic::vertexCount[cube] = Models::CubeInternal::vertexCount;
+	Basic::vertexCount[stem] = MapleTreeStemVertexCount;
+	Basic::vertexCount[leaves] = MapleTreeLeavesVertexCount;
 
 	Basic::vertices[jeep] = jeepVertices;
 	Basic::vertices[slupek] = slupeknewVertices;
@@ -231,6 +235,8 @@ void load_models() {
 	Basic::vertices[diamond] = diamondnewVertices;
 	Basic::vertices[goblet] = gobletVertices;
 	Basic::vertices[cube] = Models::CubeInternal::vertices;
+	Basic::vertices[stem] = MapleTreeStemVertices;
+	Basic::vertices[leaves] = MapleTreeLeavesVertices;
 
 	Basic::normals[jeep] = jeepNormals;
 	Basic::normals[slupek] = slupeknewNormals;
@@ -242,6 +248,8 @@ void load_models() {
 	Basic::normals[diamond] = diamondnewNormals;
 	Basic::normals[goblet] = gobletNormals;
 	Basic::normals[cube] = Models::CubeInternal::normals;
+	Basic::normals[stem] = MapleTreeStemNormals;
+	Basic::normals[leaves] = MapleTreeLeavesNormals;
 
 	Basic::texCoords[jeep] = jeepTexCoords;
 	Basic::texCoords[slupek] = slupeknewTexCoords;
@@ -253,6 +261,8 @@ void load_models() {
 	Basic::texCoords[diamond] = diamondnewTexCoords; 
 	Basic::texCoords[goblet] = gobletTexCoords; 
 	Basic::texCoords[cube] = Models::CubeInternal::texCoords;
+	Basic::texCoords[stem] = MapleTreeStemTexCoords;
+	Basic::texCoords[leaves] = MapleTreeLeavesTexCoords;
 	std::cout << "Models loaded." << std::endl;
 }
 
@@ -317,6 +327,16 @@ void initOpenGLProgram(GLFWwindow* window) {
 	models[47] = new Basic(diamond, glm::vec3(-35.0f, 0.1f, -42.0f), glm::vec3(0.004f, 0.004f, 0.004f), "diamond", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, true);
 	models[48] = new Basic(diamond, glm::vec3(-35.0f, 0.1f, -49.0f), glm::vec3(0.004f, 0.004f, 0.004f), "diamond", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, true);
 	models[49] = new Basic(goblet, glm::vec3(38.0f, 1.5f, 60.0f), glm::vec3(0.4f, 0.4f, 0.4f), "goblet", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), false, true);
+	models[50] = new Basic(stem, glm::vec3(35.0f, 0.5f, 2.0f), glm::vec3(0.3f, 0.3f, 0.3f), "maple_bark", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[51] = new Basic(leaves, glm::vec3(35.0f, 0.5f, 2.0f), glm::vec3(0.3f, 0.3f, 0.3f), "maple_leaf", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[52] = new Basic(stem, glm::vec3(40.0f, 0.5f, -3.0f), glm::vec3(0.4f, 0.4f, 0.4f), "maple_bark", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[53] = new Basic(leaves, glm::vec3(40.0f, 0.5f, -3.0f), glm::vec3(0.4f, 0.4f, 0.4f), "maple_leaf", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[54] = new Basic(stem, glm::vec3(-50.0f, 0.5f, 7.0f), glm::vec3(0.4f, 0.4f, 0.4f), "maple_bark", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[55] = new Basic(leaves, glm::vec3(-50.0f, 0.5f, 7.0f), glm::vec3(0.4f, 0.4f, 0.4f), "maple_leaf", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[56] = new Basic(stem, glm::vec3(-50.0f, 0.5f, -40.0f), glm::vec3(0.35f, 0.35f, 0.35f), "maple_bark", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[57] = new Basic(leaves, glm::vec3(-50.0f, 0.5f, -40.0f), glm::vec3(0.35f, 0.35f, 0.35f), "maple_leaf", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[58] = new Basic(stem, glm::vec3(-40.0f, 0.5f, 20.0f), glm::vec3(0.4f, 0.4f, 0.4f), "maple_bark", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
+	models[59] = new Basic(leaves, glm::vec3(-40.0f, 0.5f, 20.0f), glm::vec3(0.4f, 0.4f, 0.4f), "maple_leaf", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 
 	boxes[0] = new Sky(cube, glm::vec3(500.0f, 0.0f, 0.0f), glm::vec3(0.1f, 502.0f, 502.0f), "skybox_left", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);
 	boxes[1] = new Sky(cube, glm::vec3(-500.0f, 0.0f, 0.0f), glm::vec3(0.1f, 502.0f, 502.0f), "skybox_right", 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), true, false);

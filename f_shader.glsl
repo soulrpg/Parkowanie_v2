@@ -42,5 +42,7 @@ void main(void) {
 	totalDiffuse= max(totalDiffuse,0.2);
 
 	vec4 color=texture(tex,i_tc);
+	if(color.a < 0.1)
+		discard;
 	pixelColor = (totalDiffuse*color)+totalSpecular; //vec4(color.rgb*i_nl,color.a)=color
 }
